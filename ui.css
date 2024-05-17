@@ -1,28 +1,40 @@
 body {
     margin: 0;
     display: flex;
-    flex-direction: column;
-    align-items: center;
     background-color: #f0f0f0;
+    height: 100vh;
+    overflow: hidden;
 }
 
 #ui {
     display: flex;
     flex-direction: column;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 300px;
+    background-color: #ffffff;
+    padding: 10px;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    height: 100%;
+}
+
+#ui > div {
     margin-bottom: 20px;
 }
 
-#controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+h3 {
+    margin-top: 0;
 }
 
-button {
-    margin: 5px;
+button, input, select {
+    display: block;
+    margin: 5px 0;
     padding: 10px;
+    width: 100%;
 }
 
 canvas {
+    flex: 1;
     border: 1px solid #000;
 }

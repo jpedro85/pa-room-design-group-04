@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { updateElementList, getSelectedIndex } from './utils.js';
+import { updateElementList, getSelectedIndex, getObjectNameFromInput } from './utils.js';
 
 let objects = [];
 
@@ -8,10 +8,16 @@ let objects = [];
  * @param {THREE.Scene} scene - The scene to add the cube to.
  */
 export function addCube(scene) {
+    const name = getObjectNameFromInput();
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const cube = new THREE.Mesh(new THREE.BoxGeometry(), material);
     scene.add(cube);
-    objects.push(cube);
+
+    const objectElement = {
+        element: cube,
+        name: name,
+    }
+    objects.push(objectElement);
     updateElementList(objects);
 }
 
@@ -20,10 +26,16 @@ export function addCube(scene) {
  * @param {THREE.Scene} scene - The scene to add the pyramid to.
  */
 export function addPyramid(scene) {
+    const name = getObjectNameFromInput();
     const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
     const pyramid = new THREE.Mesh(new THREE.ConeGeometry(0.5, 1, 4), material);
     scene.add(pyramid);
-    objects.push(pyramid);
+
+    const objectElement = {
+        element: pyramid,
+        name: name,
+    }
+    objects.push(objectElement);
     updateElementList(objects);
 }
 
@@ -44,7 +56,7 @@ export function addLight(scene) {
 export function removeElement(scene) {
     const selectedIndex = getSelectedIndex();
     if (selectedIndex >= 0) {
-        scene.remove(objects[selectedIndex]);
+        scene.remove(objects[selectedIndex].element);
         objects.splice(selectedIndex, 1);
         updateElementList(objects);
     }
@@ -55,11 +67,12 @@ export function removeElement(scene) {
  * @param {number} x - The x offset to move the element.
  * @param {number} z - The z offset to move the element.
  */
-export function moveElement(x, z) {
+export function moveElement(x, y, z) {
     const selectedIndex = getSelectedIndex();
     if (selectedIndex >= 0) {
-        objects[selectedIndex].position.x += x;
-        objects[selectedIndex].position.z += z;
+        objects[selectedIndex].element.position.x += x;
+        objects[selectedIndex].element.position.y += y;
+        objects[selectedIndex].element.position.z += z;
     }
 }
 
@@ -70,10 +83,12 @@ export function moveElement(x, z) {
  */
 export function handleKeyDown(event) {
     const moves = {
-        'ArrowUp': [0, 0.1],
-        'ArrowDown': [0, -0.1],
-        'ArrowLeft': [-0.1, 0],
-        'ArrowRight': [0.1, 0],
+        'ArrowUp': [0, 0, 0.1],
+        'ArrowDown': [0, 0, -0.1],
+        'ArrowLeft': [-0.1, 0, 0],
+        'ArrowRight': [0.1, 0, 0],
+        'PageUp': [0.1, 0, 0],
+        'PageDown': [0.1, 0, 0],
     };
     if (moves[event.key]) moveElement(...moves[event.key]);
 }

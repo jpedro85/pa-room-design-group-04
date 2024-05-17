@@ -11,23 +11,40 @@
     </canvas>
 
     <div id="ui">
-        <button id="addCube">Add Cube</button>
-        <button id="addPyramid">Add Pyramid</button>
-        <button id="addLight">Add Light</button>
-        <select id="selectElement">
-            <option value="" disabled selected>Select Element</option>
-        </select>
-        <button id="removeElement">Remove Selected</button>
-        <div id="controls">
-            <button id="moveUp">Move Up</button>
-            <button id="moveDown">Move Down</button>
-            <button id="moveLeft">Move Left</button>
-            <button id="moveRight">Move Right</button>
-            <button id="scaleUp">Scale Up</button>
-            <button id="scaleDown">Scale Down</button>
+        <div id="addObject">
+            <h3>Add Object</h3>
+            <input type="text" id="obj-name" placeholder="Input the object Name"/>
+            <button id="addCube">Add Cube</button>
+            <button id="addPyramid">Add Pyramid</button>
+        </div>
+        <div id="changeTexture">
+            <h3>Change Texture</h3>
+            <select id="selectElement">
+                <option value="" disabled selected>Select Element</option>
+            </select>
+            <button id="removeElement">Remove Selected</button>
+        </div>
+        <div id="lightProperties">
+            <h3>Light Properties</h3>
+            <button id="addLight">Add Light</button>
+            <div>
+                <label for="lightColor">Color:</label>
+                <input type="color" id="lightColor" name="lightColor" value="#ffffff">
+            </div>
+            <div>
+                <label for="lightPositionX">Position X:</label>
+                <input type="number" id="lightPositionX" name="lightPositionX" step="0.1" value="5">
+            </div>
+            <div>
+                <label for="lightPositionY">Position Y:</label>
+                <input type="number" id="lightPositionY" name="lightPositionY" step="0.1" value="5">
+            </div>
+            <div>
+                <label for="lightPositionZ">Position Z:</label>
+                <input type="number" id="lightPositionZ" name="lightPositionZ" step="0.1" value="5">
+            </div>
         </div>
     </div>
-
     <!-- <script src="js/initShaders.js"></script> -->
     <!-- <script src="js/gl-matrix-min.js"></script> -->
     <script type="module" src="js/app.js"></script>

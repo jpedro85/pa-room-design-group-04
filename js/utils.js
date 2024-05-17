@@ -6,11 +6,13 @@
  */
 export function updateElementList(objects) {
     const select = document.getElementById('selectElement');
+
     select.innerHTML = '<option value="" disabled selected>Select Element</option>';
+
     objects.forEach((_, index) => {
         const option = document.createElement('option');
         option.value = index;
-        option.textContent = `Element ${index + 1}`;
+        option.textContent = _.name ?? `Element ${index}`;
         select.appendChild(option);
     });
 }
@@ -23,4 +25,17 @@ export function updateElementList(objects) {
 export function getSelectedIndex() {
     const select = document.getElementById('selectElement');
     return select.selectedIndex - 1;
+}
+
+/**
+ * Gets the object name from the input
+ * @returns The input string, if there is no input doesn't return anything
+ */
+export function getObjectNameFromInput() {
+    const input = document.getElementById("obj-name");
+    if (input.value) {
+        const value = input.value;
+        input.value = "";
+        return value;
+    }
 }

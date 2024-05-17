@@ -12,6 +12,7 @@ let renderer;
 export function initRenderer(canvas) {
     renderer = new THREE.WebGLRenderer({ canvas });
     renderer.setClearColor(0xffffff);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     return renderer;
 }
 
