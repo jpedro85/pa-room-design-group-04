@@ -1,6 +1,8 @@
 import * as THREE from 'three';
+import Stats from 'three/addons/libs/stats.module.js';
 
 let renderer;
+let stats;
 
 /**
  * Initializes the WebGL renderer with the given canvas.
@@ -13,6 +15,10 @@ export function initRenderer(canvas) {
     renderer = new THREE.WebGLRenderer({ canvas });
     renderer.setClearColor(0xffffff);
     renderer.setSize(window.innerWidth, window.innerHeight);
+
+    stats = new Stats();
+    document.body.appendChild(stats.dom);
+
     return renderer;
 }
 
@@ -31,6 +37,7 @@ export function render(renderer, scene, camera) {
      */
     function animate() {
         renderer.render(scene, camera);
+        stats.update();
         requestAnimationFrame(animate);
     }
     animate();
