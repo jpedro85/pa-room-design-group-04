@@ -9,7 +9,6 @@ Este repositório contém o projeto "PA-Room-Design" desenvolvido como parte do 
 - [Tecnologias Utilizadas](#tecnologias-utilizadas)
 - [Como Executar](#como-executar)
 - [Documentação](#documentação)
-- [Contribuição](#contribuição)
 - [Licença](#licença)
 
 ## Introdução
