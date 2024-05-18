@@ -22,9 +22,14 @@ export function updateElementList(objects) {
  *
  * @returns {number} The selected index, adjusted to be zero-based. Returns -1 if no element is selected.
  */
-export function getSelectedIndex() {
+export function getSelectedElementIndex() {
     const select = document.getElementById('selectElement');
     return select.selectedIndex - 1;
+}
+
+export function getSelectedIndex(elementId) {
+    const select = document.getElementById(elementId);
+    return select.selectedIndex;
 }
 
 /**
@@ -37,5 +42,22 @@ export function getObjectNameFromInput() {
         const value = input.value;
         input.value = "";
         return value;
+    }
+}
+
+/**
+ *
+ */
+export function handleAppearanceOptionChange() {
+    const appearanceOptions = document.getElementById('appearanceOptions');
+    const colorPicker = document.getElementById('colorPicker');
+    const modelInput = document.getElementById('modelInput');
+
+    if (appearanceOptions.value === 'color') {
+        colorPicker.style.display = 'block';
+        modelInput.style.display = 'none';
+    } else if (appearanceOptions.value === 'model') {
+        colorPicker.style.display = 'none';
+        modelInput.style.display = 'block';
     }
 }

@@ -9,32 +9,48 @@ body {
 #ui {
     display: flex;
     flex-direction: column;
+    gap: 1.2rem;
     position: absolute;
     right: 0;
     top: 0;
     width: 300px;
     background-color: #ffffff;
     padding: 10px;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
     height: 100%;
 }
 
-#ui > div {
-    margin-bottom: 20px;
+#addObject {
+    display: flex;
+    flex-direction: column;
 }
-
-h3 {
-    margin-top: 0;
-}
-
-button, input, select {
+button,
+input,
+select {
     display: block;
     margin: 5px 0;
     padding: 10px;
     width: 100%;
 }
 
+h3 {
+    padding: 0;
+    margin: 0;
+}
+
 canvas {
     flex: 1;
     border: 1px solid #000;
 }
+
+.color-pickers {
+    height: 2.5rem;
+    padding: 0;
+}
+
+.size-option {
+    display: flex;
+    gap: 0.4rem;
+    flex-direction: row;
+}
+

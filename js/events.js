@@ -1,4 +1,5 @@
-import { addCube, addPyramid, addLight, removeElement, scaleElement, handleKeyDown } from './geometry.js';
+import { addLight, removeElement, applyTexture, movementHandler, applyAppearance } from './geometry.js';
+import { handleAppearanceOptionChange } from './utils.js';
 
 /**
  * Sets up event listeners for the application's UI elements.
@@ -8,10 +9,11 @@ import { addCube, addPyramid, addLight, removeElement, scaleElement, handleKeyDo
  * @param {THREE.Scene} scene - The scene to interact with.
  */
 export function setupEventListeners(scene) {
-    document.getElementById('addCube').addEventListener('click', () => addCube(scene));
-    document.getElementById('addPyramid').addEventListener('click', () => addPyramid(scene));
-    document.getElementById('addLight').addEventListener('click', () => addLight(scene));
+    document.getElementById('appearanceOptions').addEventListener('change', () => handleAppearanceOptionChange());
+    document.getElementById('addPrimitive').addEventListener('click', () => applyAppearance(scene));
+    document.getElementById('applyTexture').addEventListener('click', () => applyTexture());
     document.getElementById('removeElement').addEventListener('click', () => removeElement(scene));
+    document.getElementById('addLight').addEventListener('click', () => addLight(scene));
 
-    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', (event) => movementHandler(event));
 }
