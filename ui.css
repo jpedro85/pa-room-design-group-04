@@ -6,17 +6,39 @@ body {
     overflow: hidden;
 }
 
+.row
+{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    border: solid 1px black;
+    padding: 10px;
+    border-radius: 15px;
+}
+
+#cantent{
+    width: 80%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#gl-canvas{
+    width: 800px !important;
+    height: 800px !important;
+}
+
 #ui {
     display: flex;
     flex-direction: column;
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 300px;
+    width: 20%;
+    min-width: 300px;
     background-color: #ffffff;
     padding: 10px;
     box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-    height: 100%;
+    overflow-y: auto;
+    max-height: 100vh;
 }
 
 #addObject {
@@ -88,4 +110,11 @@ canvas {
 .edit-options input[type="file"] {
     flex: 1 1 100%;
     min-width: 100%;
+}
+
+#lightProperties 
+{
+    display: flex;
+    flex-direction: column;
+    gap:10px;
 }

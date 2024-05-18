@@ -6,9 +6,14 @@
 </head>
 
 <body>
-    <canvas id="gl-canvas">
-        Sorry, but your browser does not support HTML5's canvas element.
-    </canvas>
+
+    <div id="cantent">
+        <div id="canvas-container">
+            <canvas id="gl-canvas" width="800" height="800" data-engine="three.js r164" >
+                Sorry, but your browser does not support HTML5's canvas element.
+            </canvas>
+        </div>
+    </div>    
 
     <div id="ui">
         <div id="addObject">
@@ -60,20 +65,43 @@
             <button id="addLight">Add Light</button>
             <div>
                 <label for="lightColor">Color:</label>
-                <input type="color" id="lightColor" class="color-pickers" name="lightColor" value="#ffffff">
+                <input type="color" id="lightColor" class="color-pickers" name="lightColor">
             </div>
-            <div>
-                <label for="lightPositionX">Position X:</label>
-                <input type="number" id="lightPositionX" name="lightPositionX" step="0.1" value="5">
+            
+
+            <label for="lightPosition">Position</label>
+            <div class="row" id="lightPosition">
+                <div>
+                    <label for="lightPositionX">X:</label>
+                    <input type="number" id="lightPositionX" name="lightPositionX" step="0.1" value="1">
+                </div>
+                <div>
+                    <label for="lightPositionY">Y:</label>
+                    <input type="number" id="lightPositionY" name="lightPositionY" step="0.1" value="1">
+                </div>
+                <div>
+                    <label for="lightPositionZ">Z</label>
+                    <input type="number" id="lightPositionZ" name="lightPositionZ" step="0.1" value="1">
+                </div>
             </div>
-            <div>
-                <label for="lightPositionY">Position Y:</label>
-                <input type="number" id="lightPositionY" name="lightPositionY" step="0.1" value="5">
+            
+            <label for="lightDirection">Direction</label>
+            <div class="row" id="lightDirection">
+                <div>
+                    <label for="lightDirectionX">X:</label>
+                    <input type="number" id="lightDirectionX" name="lightPositionX" step="0.1" value="0">
+                </div>
+                <div>
+                    <label for="lightDirectionY">Y:</label>
+                    <input type="number" id="lightDirectionY" name="lightPositionY" step="0.1" value="0">
+                </div>
+                <div>
+                    <label for="lightDirectionZ">Z:</label>
+                    <input type="number" id="lightDirectionZ" name="lightPositionZ" step="0.1" value="0">
+                </div>
             </div>
-            <div>
-                <label for="lightPositionZ">Position Z:</label>
-                <input type="number" id="lightPositionZ" name="lightPositionZ" step="0.1" value="5">
-            </div>
+
+
         </div>
     </div>
     <!-- <script src="js/initShaders.js"></script> -->

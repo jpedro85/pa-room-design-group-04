@@ -1,7 +1,8 @@
 import { applyChanges, handleAppearanceOptionChange } from './appearance.js';
 import { applyAppearance } from './geometry.js';
 import { movementHandler } from './movement.js';
-import { addLight, removeElement } from './utils.js';
+import { removeElement } from './utils.js';
+import { addLight } from './light.js';
 
 /**
  * Sets up event listeners for the application's UI elements.

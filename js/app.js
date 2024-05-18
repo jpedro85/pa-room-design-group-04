@@ -2,6 +2,7 @@ import { initRenderer, render } from './renderer.js';
 import { initScene } from './scene.js';
 import { initCamera } from './camera.js';
 import { setupEventListeners } from './events.js';
+import { addAmbientLight } from './light.js';
 
 /**
  * Initializes the application once the window is loaded.
@@ -19,6 +20,7 @@ function init() {
     const renderer = initRenderer(canvas);
     const camera = initCamera(canvas);
     const scene = initScene();
+    const ambientLight = addAmbientLight(scene,"#ffffff",10);
 
     setupEventListeners(scene, renderer, camera);
 

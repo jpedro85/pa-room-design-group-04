@@ -1,4 +1,5 @@
 import { getObjects } from './shapes.js';
+
 /**
  * Updates the element list in the select dropdown with the given objects.
  * Clears the existing options and populates the dropdown with the current objects.
@@ -39,13 +40,6 @@ export function getObjectNameFromInput() {
         input.value = "";
         return value;
     }
-}
-
-
-export function addLight(scene) {
-    const light = new THREE.PointLight(0xffffff, 1, 100);
-    light.position.set(5, 5, 5);
-    scene.add(light);
 }
 
 export function removeElement(scene) {

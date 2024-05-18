@@ -12,10 +12,11 @@ let stats;
  * @returns {THREE.WebGLRenderer} The initialized WebGL renderer.
  */
 export function initRenderer(canvas) {
-    renderer = new THREE.WebGLRenderer({ canvas });
-    renderer.setClearColor(0xffffff);
-    renderer.setSize(window.innerWidth, window.innerHeight);
 
+    renderer = new THREE.WebGLRenderer({ canvas });
+    renderer.setSize(800,800);
+    renderer.setClearColor(0xffffff);
+    
     stats = new Stats();
     document.body.appendChild(stats.dom);
 

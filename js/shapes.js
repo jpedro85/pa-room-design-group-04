@@ -12,12 +12,13 @@ let objects = [];
  * @param {number} sizeProperties.depth - The depth of the cube.
  */
 export function addCube(scene, sizeProperties) {
-    const name = getObjectNameFromInput();
-    const material = new THREE.MeshBasicMaterial();
-    const geometry = new THREE.BoxGeometry(sizeProperties.width, sizeProperties.height, sizeProperties.depth);
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-    addObjectToList(cube, name);
+	const name = getObjectNameFromInput();
+	//const material = new THREE.MeshBasicMaterial();
+	const material = new THREE.MeshPhongMaterial( { emissive:"#000000", shininess:150 } );
+	const geometry = new THREE.BoxGeometry(sizeProperties.width, sizeProperties.height, sizeProperties.depth);
+	const cube = new THREE.Mesh(geometry, material);
+	scene.add(cube);
+	addObjectToList(cube, name);
 }
 
 // TODO: Check how we can make a retangular pyramid using the custom size
@@ -30,12 +31,14 @@ export function addCube(scene, sizeProperties) {
  * @param {number} sizeProperties.depth - The depth of the pyramid.
  */
 export function addPyramid(scene, sizeProperties) {
-    const name = getObjectNameFromInput();
-    const material = new THREE.MeshBasicMaterial();
-    const geometry = new THREE.ConeGeometry(0.5, 1, 4);
-    const pyramid = new THREE.Mesh(geometry, material);
-    scene.add(pyramid);
-    addObjectToList(pyramid, name);
+	const radius = sizeProperties.width >= sizeProperties.depth ? sizeProperties.width : sizeProperties.depth;
+
+	const name = getObjectNameFromInput();
+	const material = new THREE.MeshBasicMaterial();
+	const geometry = new THREE.ConeGeometry(radius, 1, 4);
+	const pyramid = new THREE.Mesh(geometry, material);
+	scene.add(pyramid);
+	addObjectToList(pyramid, name);
 }
 
 /**
@@ -44,10 +47,10 @@ export function addPyramid(scene, sizeProperties) {
  * @param {THREE.Mesh} element - The 3D object created by Three.js
  */
 function addObjectToList(element, name) {
-    const objectElement = { element, name };
-    objects.push(objectElement);
-    updateElementList(objects);
-    console.log("Object added:", objectElement);
+	const objectElement = { element, name };
+	objects.push(objectElement);
+	updateElementList(objects);
+	console.log('Object added:', objectElement);
 }
 
 /**
@@ -55,5 +58,5 @@ function addObjectToList(element, name) {
  * @returns {Object} object - The list of object inside the canvas
  */
 export function getObjects() {
-    return objects;
+	return objects;
 }
