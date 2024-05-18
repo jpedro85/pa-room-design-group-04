@@ -40,17 +40,10 @@ export function applyAppearance(scene) {
         return;
     }
 
-    switch (appearanceOptions.value) {
-        case 'color':
-            applyColor(colorPicker.value);
-            break;
-        case 'model':
-            if (modelInput.files.length > 0) {
-                applyModel(modelInput.files[0], scene);
-            } else {
-                alert('No model file selected.');
-            }
-            break;
+    if (modelInput.files.length > 0) {
+        applyModel(modelInput.files[0], scene);
+        return;
     }
+    applyColor(colorPicker.value);
 }
 

@@ -9,7 +9,6 @@ body {
 #ui {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
     position: absolute;
     right: 0;
     top: 0;
@@ -63,16 +62,30 @@ canvas {
 
 .edit-options {
     display: flex;
+    flex-wrap: wrap;
+    width: 100%;
     gap: 10px;
 }
 
 .edit-options select,
-.edit-options input {
+.edit-options input[type="number"] {
     flex: 1 1 45%;
     min-width: calc(50% - 10px);
 }
 
-.edit-options div label,
 .edit-options div {
+    display: flex;
+    flex: 1 1 45%;
     min-width: calc(50% - 10px);
+    align-items: center;
+}
+
+.edit-options div label {
+    flex: 0 0 auto;
+    margin-right: 10px;
+}
+
+.edit-options input[type="file"] {
+    flex: 1 1 100%;
+    min-width: 100%;
 }

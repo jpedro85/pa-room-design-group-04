@@ -1,3 +1,4 @@
+import { getObjects } from './shapes.js';
 /**
  * Updates the element list in the select dropdown with the given objects.
  * Clears the existing options and populates the dropdown with the current objects.
@@ -58,6 +59,7 @@ export function removeElement(scene) {
 
 export function scaleElement(factor) {
     const selectedIndex = getSelectedElementIndex();
+    const objects = getObjects();
     if (selectedIndex >= 0) {
         objects[selectedIndex].element.scale.multiplyScalar(factor);
     }

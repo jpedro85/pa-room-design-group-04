@@ -25,9 +25,9 @@ export function applyColor(color) {
 /**
  * Applies the model to the last object added.
  * @param {File} modelFile - The model file to apply.
+ * @param {THREE.Scene} scene - The scene to add the object
  */
 export function applyModel(modelFile, scene) {
-    const objects = getObjects();
     if (!modelFile || !allowedModelTypes[modelFile.type]) {
         alert('Invalid file type. Please select a valid model file (OBJ, GLTF).');
         return;
@@ -49,7 +49,7 @@ export function applyModel(modelFile, scene) {
 /**
  * Replaces the last object in the scene with the given model.
  * @param {THREE.Object3D} model - The model to replace the last object with.
- * @param {THREE.Scene} scene -
+ * @param {THREE.Scene} scene - The scene to replace the object.
  */
 function replaceLastObjectWithModel(model, scene) {
     const objects = getObjects();
@@ -59,7 +59,7 @@ function replaceLastObjectWithModel(model, scene) {
     scene.remove(lastObject);
 
     if (!model.material) {
-        model.material = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        model.material = new THREE.MeshBasicMaterial({ color: "#fff" });
     }
 
     model.name = lastObject.name;
@@ -89,13 +89,17 @@ export function applyTexture(file, selectedElementIndex) {
         return;
     }
 
+    const selectedObject = objects[selectedElementIndex].element;
+
     const reader = new FileReader();
     reader.onload = function(event) {
         const texture = new THREE.TextureLoader().load(event.target.result);
-        objects[selectedElementIndex].element.material.map = texture;
-        objects[selectedElementIndex].element.material.needsUpdate = true;
+        selectedObject.material.map = texture;
+        selectedObject.material.needsUpdate = true;
     };
+
     reader.readAsDataURL(file);
+    console.log("Texture applied: ", objects[selectedElementIndex]);
 }
 
 /**
@@ -103,7 +107,8 @@ export function applyTexture(file, selectedElementIndex) {
  * @param {number} factor - The scale factor to apply.
  * @param {number} selectedIndex - The index of the selected element.
  */
-function applyScale(factor) {
+function applyScale(factor, selectedIndex) {
+    const objects = getObjects();
     objects[selectedIndex].element.scale.multiplyScalar(factor);
 }
 
@@ -115,10 +120,11 @@ export function applyChanges() {
     const file = fileInput.files[0];
     const selectedElementIndex = getSelectedElementIndex();
 
-    const scaleValue = document.getElementById("scale").value;
+    const scaleInput = document.getElementById("scale");
+    const scaleValue = parseFloat(scaleInput.value);
 
     if (!(selectedElementIndex >= 0)) {
-        alert("There is no valid Element to play changes. Please select a valid Element.")
+        alert("There is no valid element to apply changes. Please select a valid element.");
         return;
     }
 
@@ -127,6 +133,7 @@ export function applyChanges() {
     }
     if (scaleValue) {
         applyScale(scaleValue, selectedElementIndex);
+        scaleInput.value = 1;
     }
 }
 
