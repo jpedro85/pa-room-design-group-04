@@ -1,56 +1,40 @@
-# pa-room-design-04
 
-Este repositório contém o projeto "PA-Room-Design" desenvolvido como parte do módulo de Programação Avançada. O projeto tem como objetivo a criação de uma visualização interativa que simula a organização de objetos dentro de uma área delimitada, utilizando JavaScript, HTML e WebGL (ou Three.js).
+# PA Room Design Project
 
-## Índice
+This project is part of the Advanced Programming course and aims to demonstrate the knowledge acquired by students during the final module. The project involves creating a room design visualization using JavaScript, HTML, and WebGL or Three.js libraries.
 
-- [Introdução](#introdução)
-- [Funcionalidades](#funcionalidades)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Como Executar](#como-executar)
-- [Documentação](#documentação)
-- [Licença](#licença)
+## Project Description
 
-## Introdução
+The objective is to simulate the arrangement of objects of various dimensions within a defined space. The main features include:
 
-Este projeto foi desenvolvido para demonstrar os conhecimentos adquiridos em transformações gráficas, uso de texturas, animações, shaders, iluminação e carregamento de modelos 3D. A visualização simula a organização de objetos em um quarto, permitindo a interação do usuário com os elementos da cena.
+- Graphic transformations using matrices (projection, rotation, translation, scaling)
+- Use of textures
+- Animations
+- Shader implementations
+- Lighting setup and implementation
+- 3D model loading
 
-## Funcionalidades
+## Requirements
 
-- **Transformações Gráficas:** Projeção, rotação, translação e escalonamento utilizando matrizes.
-- **Texturas:** Aplicação de texturas aos objetos.
-- **Animações:** Animação de elementos da cena.
-- **Shaders:** Implementação de shaders personalizados.
-- **Iluminação:** Edição e implementação de fontes de luz, incluindo luz ambiente e fontes de luz direcionais.
-- **Carregamento de Modelos 3D:** Suporte para importação de modelos 3D.
-- **Interação com a Cena:** Adição, remoção e manipulação de objetos através de uma interface interativa.
+- Node.js
+- npm (Node Package Manager)
 
-## Tecnologias Utilizadas
+## Setup
 
-- **JavaScript**
-- **HTML**
-- **WebGL**
-- **Three.js (opcional)**
+Follow these steps to set up and run the project:
 
-## Como Executar
+1. **Clone the repository**:
+   ```sh
+   git clone <repository-url>
+   cd <repository-folder>
+   ```
 
-1. Clone o repositório:
-    ```sh
-    git clone https://github.com/Programacao-Avancada-2324/pa-room-design-04.git
-    ```
-2. Navegue até o diretório do projeto:
-    ```sh
-    cd pa-room-design-04
-    ```
-3. Abra o arquivo `index.html` em um navegador web.
+2. **Install dependencies**:
+   ```sh
+   npm install
+   ```
 
-## Documentação
-
-Todas as classes e funções estão documentadas utilizando JSDoc. Para visualizar a documentação, acesse o seguinte link:
-
-[JSDoc Documentation](https://jsdoc.app/about-getting-started.html#adding-documentation-comments-to-your-code)
-
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+3. **Run the project**:
+   ```sh
+   npx vite
+   ```
