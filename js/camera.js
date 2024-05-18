@@ -12,7 +12,7 @@ export function initCamera(canvas) {
     const fov = 75;
     const aspect = canvas.width / canvas.height;
     const near = 0.1;
-    const far = 5;
+    const far = 10;
     camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
     camera.position.z = 4;
     return camera;

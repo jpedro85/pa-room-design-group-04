@@ -46,4 +46,3 @@ export function applyAppearance(scene) {
     }
     applyColor(colorPicker.value);
 }
-

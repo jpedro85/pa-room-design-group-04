@@ -57,6 +57,22 @@
                 </div>
                 <input type="file" id="textureInput" accept="image/*">
             </div>
+            
+            <label for="editRotation">Rotation</label>
+            <div class="row" id="editRotation">
+                <div>
+                    <label for="editRotationX">X:</label>
+                    <input type="number" id="editRotationX" name="scale" min="-180" max="180" step="1" value="0">
+                </div>
+                <div>
+                    <label for="editRotationY">Y:</label>
+                    <input type="number" id="editRotationY" name="scale" min="-180" max="180" step="1" value="0">
+                </div>
+                <div>
+                    <label for="editRotationZ">Z:</label>
+                    <input type="number" id="editRotationZ" name="scale" min="-180" max="180" step="1" value="0">
+                </div>
+            </div>
             <button id="applyChanges">Apply Changes</button>
             <button id="removeElement">Remove Selected</button>
         </div>

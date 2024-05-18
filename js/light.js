@@ -35,7 +35,7 @@ export function addLight(scene) {
     console.log(lightColor.value,positionX,positionY,positionZ);
     console.log(vectorDirectionX,vectorDirectionY,vectorDirectionZ);
 
-    const light = new THREE.DirectionalLight( lightColor.value , 1);
+    const light = new THREE.DirectionalLight( lightColor.value , 4);
     light.position.set(positionX, positionX, positionX);
 
     light.target.position.set(

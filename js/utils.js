@@ -58,3 +58,14 @@ export function scaleElement(factor) {
         objects[selectedIndex].element.scale.multiplyScalar(factor);
     }
 }
+
+/**
+ * Converts a value in degrees to radians.
+ *
+ * @param   {[type]}  degrees Angle in degrees.
+ * @return  {[type]} Angle in radians.
+ */
+export function degreesToRadians( degrees )
+{
+    return degrees * Math.PI / 180;
+}

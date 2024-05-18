@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { getObjectNameFromInput, updateElementList } from './utils.js';
+import { degreesToRadians } from './utils.js';
 
 let objects = [];
 
@@ -59,4 +60,54 @@ function addObjectToList(element, name) {
  */
 export function getObjects() {
 	return objects;
+}
+
+
+/**
+ * [description]
+ * @param {THREE.scene} scene - The scene to add the planes
+ */
+export function addPlanes(scene)
+{
+    const material = new THREE.MeshBasicMaterial( {color: 0x808080, side: THREE.DoubleSide} );
+    const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Black border
+
+    let planeLeft = createPlane(edgeMaterial,material,4,4);
+    planeLeft.rotateY(degreesToRadians(90));
+    planeLeft.position.set(-2, 0, 0);
+    scene.add(planeLeft);
+
+ 
+    let planeRight = createPlane(edgeMaterial,material,4,4);
+    planeRight.rotateX(degreesToRadians(90));
+    planeRight.position.set(0, -2, 0);
+    scene.add(planeRight);
+
+    let planeBack = createPlane(edgeMaterial,material,4,4);
+    planeBack.position.set(0, 0, -2);
+    scene.add(planeBack);
+
+}
+
+/**
+ * Creates a plane
+ *
+ * @param   {THREE.material}  edgeMaterial  The material of the edges
+ * @param   {THREE.material}  material  The material of the plane.
+ * @param   {Number}  height    The height of the plane.
+ * @param   {Number}  width     The width of the plane.
+ *
+ * @return  {THREE.Mesh} The Mesh of the created plane.
+ */
+export function createPlane( edgeMaterial , material, height, width)
+{
+    let planeGeometry = new THREE.PlaneGeometry( width, height );
+    let planeMesh = new THREE.Mesh(planeGeometry, material);
+
+    let edgesGeometry = new THREE.EdgesGeometry(planeGeometry);
+    let border = new THREE.LineSegments(edgesGeometry, edgeMaterial);
+
+    planeMesh.add(border);
+
+    return planeMesh;
 }

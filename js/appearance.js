@@ -1,13 +1,13 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { getSelectedElementIndex, updateElementList } from './utils.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { degreesToRadians, getSelectedElementIndex, updateElementList } from './utils.js';
 import { getObjects } from './shapes.js';
 
 const allowedTextureTypes = ['image/jpeg', 'image/png'];
 const allowedModelTypes = {
-    'application/x-tgif': OBJLoader,
-    'model/obj': OBJLoader,
-    'text/plain': OBJLoader,
+    'gltf': GLTFLoader,
+    'obj': OBJLoader,
 };
 
 /**
@@ -28,12 +28,16 @@ export function applyColor(color) {
  * @param {THREE.Scene} scene - The scene to add the object
  */
 export function applyModel(modelFile, scene) {
-    if (!modelFile || !allowedModelTypes[modelFile.type]) {
-        alert('Invalid file type. Please select a valid model file (OBJ, GLTF).');
+   
+    const fileNameParts = modelFile.name.split(".");
+    const typeFromName = fileNameParts[fileNameParts.length-1]; 
+    console.log(typeFromName)
+    if ( !allowedModelTypes[typeFromName] ) {
+        alert('Invalid file type. Please select a valid model file (OBJ).');
         return;
     }
 
-    const LoaderClass = allowedModelTypes[modelFile.type];
+    const LoaderClass = allowedModelTypes[typeFromName];
     const loader = new LoaderClass();
 
     const reader = new FileReader();
@@ -113,12 +117,30 @@ function applyScale(factor, selectedIndex) {
 }
 
 /**
+ * Applies the scale factor to the selected object.
+ * @param {number} factor - The scale factor to apply.
+ * @param {number} selectedIndex - The index of the selected element.
+ */
+function applyRotation( selectedIndex, rotationDegreesX=0, rotationDegreesY=0, rotationDegreesZ=0) {
+    const objects = getObjects();
+    const element =  objects[selectedIndex].element
+    element.rotateX(rotationDegreesX);
+    element.rotateY(rotationDegreesY);
+    element.rotateZ(rotationDegreesZ);
+}
+
+
+/**
  * Applies the changes to the selected element based on user inputs.
  */
 export function applyChanges() {
     const fileInput = document.getElementById('textureInput');
     const file = fileInput.files[0];
     const selectedElementIndex = getSelectedElementIndex();
+    const rotationX = parseFloat( document.getElementById("editRotationX").value );
+    const rotationY = parseFloat( document.getElementById("editRotationY").value );
+    const rotationZ = parseFloat( document.getElementById("editRotationZ").value );
+
 
     const scaleInput = document.getElementById("scale");
     const scaleValue = parseFloat(scaleInput.value);
@@ -135,7 +157,16 @@ export function applyChanges() {
         applyScale(scaleValue, selectedElementIndex);
         scaleInput.value = 1;
     }
-}
+    if( rotationX || rotationY || rotationZ )
+    {
+        applyRotation(selectedElementIndex,
+            degreesToRadians(rotationX),
+            degreesToRadians(rotationY),
+            degreesToRadians(rotationZ)
+        );
+    }
+    
+} 
 
 /**
  * Handles the change in appearance options by displaying the appropriate input elements.
