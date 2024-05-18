@@ -76,24 +76,57 @@ function replaceLastObjectWithModel(model, scene) {
     console.log("Model applied:", model);
 }
 
-export function applyTexture(fileInput) {
-    const file = fileInput.files[0];
-    const selectedElementIndex = getSelectedElementIndex();
+/**
+ * Applies the texture to the selected object.
+ * @param {File} file - The texture file to apply.
+ * @param {number} selectedElementIndex - The index of the selected element.
+ */
+export function applyTexture(file, selectedElementIndex) {
     const objects = getObjects();
 
-    if (file && selectedElementIndex >= 0) {
-        if (!allowedTextureTypes.includes(file.type)) {
-            alert('Invalid file type. Please select an image file (jpeg, png, gif).');
-            return;
-        }
+    if (!allowedTextureTypes.includes(file.type)) {
+        alert('Invalid file type. Please select an image file (jpeg, png, gif).');
+        return;
+    }
 
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const texture = new THREE.TextureLoader().load(event.target.result);
-            objects[selectedElementIndex].element.material.map = texture;
-            objects[selectedElementIndex].element.material.needsUpdate = true;
-        };
-        reader.readAsDataURL(file);
+    const reader = new FileReader();
+    reader.onload = function(event) {
+        const texture = new THREE.TextureLoader().load(event.target.result);
+        objects[selectedElementIndex].element.material.map = texture;
+        objects[selectedElementIndex].element.material.needsUpdate = true;
+    };
+    reader.readAsDataURL(file);
+}
+
+/**
+ * Applies the scale factor to the selected object.
+ * @param {number} factor - The scale factor to apply.
+ * @param {number} selectedIndex - The index of the selected element.
+ */
+function applyScale(factor) {
+    objects[selectedIndex].element.scale.multiplyScalar(factor);
+}
+
+/**
+ * Applies the changes to the selected element based on user inputs.
+ */
+export function applyChanges() {
+    const fileInput = document.getElementById('textureInput');
+    const file = fileInput.files[0];
+    const selectedElementIndex = getSelectedElementIndex();
+
+    const scaleValue = document.getElementById("scale").value;
+
+    if (!(selectedElementIndex >= 0)) {
+        alert("There is no valid Element to play changes. Please select a valid Element.")
+        return;
+    }
+
+    if (file) {
+        applyTexture(file, selectedElementIndex);
+    }
+    if (scaleValue) {
+        applyScale(scaleValue, selectedElementIndex);
     }
 }
 

@@ -1,4 +1,4 @@
-import { applyTexture, handleAppearanceOptionChange } from './appearance.js';
+import { applyChanges, handleAppearanceOptionChange } from './appearance.js';
 import { applyAppearance } from './geometry.js';
 import { movementHandler } from './movement.js';
 import { addLight, removeElement } from './utils.js';
@@ -13,7 +13,7 @@ import { addLight, removeElement } from './utils.js';
 export function setupEventListeners(scene) {
     document.getElementById('appearanceOptions').addEventListener('change', () => handleAppearanceOptionChange());
     document.getElementById('addPrimitive').addEventListener('click', () => applyAppearance(scene));
-    document.getElementById('applyTexture').addEventListener('click', () => applyTexture());
+    document.getElementById('applyChanges').addEventListener('click', () => applyChanges());
     document.getElementById('removeElement').addEventListener('click', () => removeElement(scene));
     document.getElementById('addLight').addEventListener('click', () => addLight(scene));
 

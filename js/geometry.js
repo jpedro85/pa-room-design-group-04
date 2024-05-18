@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { addCube, addPyramid } from './shapes.js';
-import { applyColor, applyModel, applyTexture } from './appearance.js';
+import { applyColor, applyModel } from './appearance.js';
 
 /**
  * Applies the chosen appearance to the selected element in the scene.

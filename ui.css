@@ -24,6 +24,13 @@ body {
     display: flex;
     flex-direction: column;
 }
+
+#changeTexture {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 button,
 input,
 select {
@@ -54,3 +61,18 @@ canvas {
     flex-direction: row;
 }
 
+.edit-options {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-options select,
+.edit-options input {
+    flex: 1 1 45%;
+    min-width: calc(50% - 10px);
+}
+
+.edit-options div label,
+.edit-options div {
+    min-width: calc(50% - 10px);
+}
