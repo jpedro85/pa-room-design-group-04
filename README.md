@@ -51,22 +51,6 @@ Todas as classes e funções estão documentadas utilizando JSDoc. Para visualiz
 
 [JSDoc Documentation](https://jsdoc.app/about-getting-started.html#adding-documentation-comments-to-your-code)
 
-## Contribuição
-
-As contribuições individuais foram monitoradas através do histórico de commits no repositório. Para contribuir:
-
-1. Crie uma nova branch:
-    ```sh
-    git checkout -b nome-da-sua-branch
-    ```
-2. Faça as suas alterações e commit:
-    ```sh
-    git commit -m 'Descrição das alterações'
-    ```
-3. Envie para o branch principal:
-    ```sh
-    git push origin nome-da-sua-branch
-    ```
 
 ## Licença
 
