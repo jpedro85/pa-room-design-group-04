@@ -27,11 +27,6 @@ export function getSelectedElementIndex() {
     return select.selectedIndex - 1;
 }
 
-export function getSelectedIndex(elementId) {
-    const select = document.getElementById(elementId);
-    return select.selectedIndex;
-}
-
 /**
  * Gets the object name from the input
  * @returns The input string, if there is no input doesn't return anything
@@ -45,19 +40,25 @@ export function getObjectNameFromInput() {
     }
 }
 
-/**
- *
- */
-export function handleAppearanceOptionChange() {
-    const appearanceOptions = document.getElementById('appearanceOptions');
-    const colorPicker = document.getElementById('colorPicker');
-    const modelInput = document.getElementById('modelInput');
 
-    if (appearanceOptions.value === 'color') {
-        colorPicker.style.display = 'block';
-        modelInput.style.display = 'none';
-    } else if (appearanceOptions.value === 'model') {
-        colorPicker.style.display = 'none';
-        modelInput.style.display = 'block';
+export function addLight(scene) {
+    const light = new THREE.PointLight(0xffffff, 1, 100);
+    light.position.set(5, 5, 5);
+    scene.add(light);
+}
+
+export function removeElement(scene) {
+    const selectedIndex = getSelectedElementIndex();
+    if (selectedIndex >= 0) {
+        scene.remove(objects[selectedIndex].element);
+        objects.splice(selectedIndex, 1);
+        updateElementList(objects);
+    }
+}
+
+export function scaleElement(factor) {
+    const selectedIndex = getSelectedElementIndex();
+    if (selectedIndex >= 0) {
+        objects[selectedIndex].element.scale.multiplyScalar(factor);
     }
 }

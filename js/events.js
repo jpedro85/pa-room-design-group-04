@@ -1,5 +1,7 @@
-import { addLight, removeElement, applyTexture, movementHandler, applyAppearance } from './geometry.js';
-import { handleAppearanceOptionChange } from './utils.js';
+import { applyTexture, handleAppearanceOptionChange } from './appearance.js';
+import { applyAppearance } from './geometry.js';
+import { movementHandler } from './movement.js';
+import { addLight, removeElement } from './utils.js';
 
 /**
  * Sets up event listeners for the application's UI elements.
@@ -16,4 +18,5 @@ export function setupEventListeners(scene) {
     document.getElementById('addLight').addEventListener('click', () => addLight(scene));
 
     document.addEventListener('keydown', (event) => movementHandler(event));
+
 }

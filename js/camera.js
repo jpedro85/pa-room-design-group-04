@@ -1,21 +1,5 @@
 import * as THREE from 'three';
 
-const CAMERA_SPEED = 0.1;
-export const cameraMoves = {
-    w: { axis: 'z', direction: -1 },
-    W: { axis: 'z', direction: -1 },
-    s: { axis: 'z', direction: 1 },
-    S: { axis: 'z', direction: 1 },
-    a: { axis: 'x', direction: -1 },
-    A: { axis: 'x', direction: -1 },
-    d: { axis: 'x', direction: 1 },
-    D: { axis: 'x', direction: 1 },
-    q: { axis: 'y', direction: 1 },
-    Q: { axis: 'y', direction: 1 },
-    r: { axis: 'y', direction: -1 },
-    R: { axis: 'y', direction: -1 }
-};
-
 let camera;
 
 /**
@@ -35,12 +19,9 @@ export function initCamera(canvas) {
 }
 
 /**
- * Moves the camera based on the key pressed.
- * @param {string} key - The key pressed.
+ * Gets the camera object
+ * @returns {THREE.PerspectiveCamera} The Perspective camera
  */
-export function moveCamera(key) {
-   const move = cameraMoves[key];
-    if (move) {
-        camera.position[move.axis] += move.direction * CAMERA_SPEED;
-    }
+export function getCamera() {
+    return camera;
 }
