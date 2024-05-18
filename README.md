@@ -37,11 +37,11 @@ Este projeto foi desenvolvido para demonstrar os conhecimentos adquiridos em tra
 
 1. Clone o repositório:
     ```sh
-    git clone https://github.com/Programacao-Avancada-2324/pa-room-design-XX.git
+    git clone https://github.com/Programacao-Avancada-2324/pa-room-design-04.git
     ```
 2. Navegue até o diretório do projeto:
     ```sh
-    cd pa-room-design-XX
+    cd pa-room-design-04
     ```
 3. Abra o arquivo `index.html` em um navegador web.
 
