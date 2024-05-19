@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { getAxisVectors } from './utils';
+import { getAxisVectors, getPressedKeys } from './utils';
 
 let camera;
 
@@ -16,8 +16,8 @@ export function initCamera(canvas) {
     const near = 0.1;
     const far = 100;
     camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    camera.position.z = 4;
-    camera.lookAt( new THREE.Vector3(0,0,0) );
+    camera.position.z = 10;
+    camera.lookAt( new THREE.Vector3(-2,-2,0) );
     return camera;
 }
 
@@ -120,6 +120,8 @@ function getCameraPosition()
  */
 export async function enterCanvas(event,canvas)
 {
+    document.getElementById("PressEsc").style="display: block;";
+    document.getElementById("ClickToEnter").style="display: none;";
     canvas.onmousemove = (event) => { cameraUpdateDirection(event,canvas) };
     await canvas.requestPointerLock({  unadjustedMovement: true,});
 } 
@@ -137,7 +139,10 @@ export function exitCanvas(event,canvas)
 {
     if ( document.pointerLockElement !== canvas) 
     {
+        document.exitPointerLock();
         canvas.removeEventListener('mousemove', cameraUpdateDirection, false);
         canvas.onmousemove = null
+        document.getElementById("PressEsc").style="display: none;";
+        document.getElementById("ClickToEnter").style="display: block;";
     }
 } 

@@ -136,15 +136,14 @@ export function addPlanes(scene) {
     const material = new THREE.MeshPhongMaterial({ color: 0x808080, emissive: "#1A1A1A", shininess: 100, side: THREE.DoubleSide });
     const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Black border
 
-    let planeLeft = createPlane(edgeMaterial, material, 4, 4);
+    let planeLeft = createPlane(edgeMaterial, material, 20, 20);
     planeLeft.rotateY(degreesToRadians(90));
-    planeLeft.position.set(-2, 0, 0);
+    planeLeft.position.set(-10, 0, 0);
     scene.add(planeLeft);
 
-    let planeBack = createPlane(edgeMaterial,material,4,4);
-    planeBack.position.set(0, 0, -2);
+    let planeBack = createPlane(edgeMaterial,material, 20, 20);
+    planeBack.position.set(0, 0, -10);
     scene.add(planeBack);
-
 }
 
 /**

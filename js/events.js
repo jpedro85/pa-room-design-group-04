@@ -13,7 +13,7 @@ import { addKey,removeKey } from './utils.js';
  *
  * @param {THREE.Scene} scene - The scene to interact with.
  */
-export function setupEventListeners(scene) {
+export function setupEventListeners(scene,canvas) {
     document.getElementById('colorFlag').addEventListener('change', () => colorFlagHandler());
     document.getElementById('lightTypeOption').addEventListener('change', () => handleLightTypeOptionChange());
     document.getElementById('addPrimitive').addEventListener('click', () => applyAppearance(scene));
@@ -27,5 +27,5 @@ export function setupEventListeners(scene) {
     document.addEventListener('keyup', removeKey);
 
     document.addEventListener("pointerlockchange", (event) => exitCanvas(event,canvas) )
-    canvas.addEventListener('click', async (event) => { enterCanvas(event,canvas); } );
+    canvas.addEventListener('click', (event) => { enterCanvas(event,canvas); } );
 }

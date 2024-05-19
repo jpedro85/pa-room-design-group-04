@@ -15,7 +15,7 @@ export function initRenderer(canvas) {
 
     renderer = new THREE.WebGLRenderer({ canvas });
     renderer.setSize(800,800);
-    renderer.setClearColor(0xffffff);
+    renderer.setClearColor(0x151515);
     
     stats = new Stats();
     document.body.appendChild(stats.dom);

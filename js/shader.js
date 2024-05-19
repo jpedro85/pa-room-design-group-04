@@ -38,7 +38,7 @@ function init(scene,camera,renderer) {
 
     uniforms = {
 
-        'fogDensity': { value: 0.15 },
+        'fogDensity': { value: 0.02 },
         'fogColor': { value: new THREE.Vector3( 0, 0, 0 ) },
         'time': { value: 2.0 },
         'uvScale': { value: new THREE.Vector2( 1.0, 1.0 ) },
@@ -54,9 +54,9 @@ function init(scene,camera,renderer) {
 
     } );
 
-    mesh = new THREE.Mesh( new THREE.PlaneGeometry(4,4), material );
+    mesh = new THREE.Mesh( new THREE.PlaneGeometry(20,20), material );
     mesh.rotateX(degreesToRadians(90));
-    mesh.position.y = -2;
+    mesh.position.y = -10;
     scene.add( mesh );
 
 
