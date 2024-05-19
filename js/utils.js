@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { getObjects } from "./shapes.js";
+import { Vector3 } from 'three';
 
 let ColorFlag = false;
 
@@ -142,4 +143,49 @@ export function scaleModelToFitCanvas(model) {
     const scaleFactor = 1.5 / maxDim;
 
     model.scale.set(scaleFactor, scaleFactor, scaleFactor);
+}
+
+const vectorY = new Vector3(0,1,0).normalize();
+const vectorX = new Vector3(1,0,0).normalize();
+const vectorZ = new Vector3(0,0,1).normalize();
+
+/**
+ * The function getAxisVectors() returns three axis vectors: vectorX, vectorY, and vectorZ.
+ * @returns The function `getAxisVectors()` is returning three variables: `vectorX`, `vectorY`, and
+ * `vectorZ`.
+ */
+export function getAxisVectors()
+{
+    return { vectorX, vectorY, vectorZ };
+}
+
+let keysPressed = {};
+
+/**
+ * The function `addKey` adds the pressed key to the `keysPressed` object.
+ * @param event - The `event` parameter is an object that contains information about the event that
+ * occurred, such as a key press event in this case.
+ */
+export function addKey(event) 
+{
+    keysPressed[event.key] = true;
+}
+
+/**
+ * The function `addKey` adds the pressed key to the `keysPressed` object.
+ * @param event - The `event` parameter is an object that contains information about the event that
+ * occurred, such as a key press event in this case.
+ */
+export function removeKey(event) 
+{
+    delete keysPressed[event.key];
+}
+
+/**
+ * The function `getPressedKeys` returns the keys that are currently pressed.
+ * @returns The function `getPressedKeys` is returning the value of the variable `keysPressed`.
+ */
+export function getPressedKeys()
+{
+    return keysPressed;
 }

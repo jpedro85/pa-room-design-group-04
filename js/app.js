@@ -26,7 +26,7 @@ function init() {
     shaderObjectExampleStart(scene, camera, renderer);
     addPlanes(scene);
 
-    setupEventListeners(scene, renderer, camera);
+    setupEventListeners(scene, canvas, renderer, camera);
 
     render(renderer, scene, camera);
 }

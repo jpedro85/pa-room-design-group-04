@@ -1,6 +1,6 @@
-import { getSelectedElementIndex } from './utils.js';
+import { getSelectedElementIndex , getPressedKeys } from './utils.js';
 import { getObjects } from './shapes.js';
-import { getCamera } from './camera.js';
+import { getCamera, getCameraVectors } from './camera.js';
 
 
 const CAMERA_SPEED = 0.1;
@@ -13,18 +13,18 @@ const moves = {
     'PageDown': [0, -0.1, 0],
 };
 const cameraMoves = {
-    w: { axis: 'z', direction: -1 },
-    W: { axis: 'z', direction: -1 },
-    s: { axis: 'z', direction: 1 },
-    S: { axis: 'z', direction: 1 },
-    a: { axis: 'x', direction: -1 },
-    A: { axis: 'x', direction: -1 },
-    d: { axis: 'x', direction: 1 },
-    D: { axis: 'x', direction: 1 },
-    q: { axis: 'y', direction: 1 },
-    Q: { axis: 'y', direction: 1 },
-    r: { axis: 'y', direction: -1 },
-    R: { axis: 'y', direction: -1 }
+    w: { axis: 'forward', direction: 1 },
+    W: { axis: 'forward', direction: 1 },
+    s: { axis: 'forward', direction: -1 },
+    S: { axis: 'forward', direction: -1 },
+    a: { axis: 'right', direction: -1 },
+    A: { axis: 'right', direction: -1 },
+    d: { axis: 'right', direction: 1 },
+    D: { axis: 'right', direction: 1 },
+    q: { axis: 'up', direction: 1 },
+    Q: { axis: 'up', direction: 1 },
+    r: { axis: 'up', direction: -1 },
+    R: { axis: 'up', direction: -1 }
 };
 
 let isTyping = false;
@@ -53,12 +53,15 @@ export function movementHandler(event) {
     // Ignore movement if typing in an input field
     if (isTyping) return;
 
-    if (moves[event.key]) {
-        moveElement(...moves[event.key]);
-    }
-    else if (cameraMoves[event.key]) {
-        moveCamera(event.key);
-    }
+    for(let key in getPressedKeys())
+    {     
+        if (moves[key]) {
+            moveElement(...moves[key]);
+        }
+        else if (cameraMoves[key]) {
+            moveCamera(key);
+        }
+    } 
 }
 
 /**
@@ -68,8 +71,11 @@ export function movementHandler(event) {
 export function moveCamera(key) {
     const move = cameraMoves[key];
     const camera = getCamera();
+    const { up, right, forward } = getCameraVectors();
+    const cameraRelativeDirections = { "up":up, "right":right, "forward":forward, }
+    const vectorDirection = cameraRelativeDirections[move.axis];
     if (move) {
-        camera.position[move.axis] += move.direction * CAMERA_SPEED;
+        camera.position.add( vectorDirection.multiplyScalar( CAMERA_SPEED * move.direction ) );
     }
 }
 
