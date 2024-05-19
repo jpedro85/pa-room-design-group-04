@@ -84,7 +84,7 @@
 
     <div id="cantent">
         <div id="canvas-container">
-            <canvas id="gl-canvas" width="800" height="800" data-engine="three.js r164" >
+            <canvas id="gl-canvas" width="800" height="800" data-engine="three.js r164">
                 Sorry, but your browser does not support HTML5's canvas element.
             </canvas>
         </div>
@@ -120,7 +120,7 @@
                         <input type="number" id="InitialRotationX" name="scale" min="-180" max="180" step="1" value="0">
                     </div>
                     <div>
-                        <label for="editRotationY">Y:</label>
+                        <label for="InitialRotationY">Y:</label>
                         <input type="number" id="InitialRotationY" name="scale" min="-180" max="180" step="1" value="0">
                     </div>
                     <div>
@@ -182,11 +182,16 @@
                         <input type="number" id="editRotationZ" name="scale" min="-180" max="180" step="1" value="0">
                     </div>
                 </div>
+                <div id="animationControls">
+                    <label>Animation Controls</label>
+                    <button id="addAnimation">Add to animation</button>
+                    <button id="removeAnimation">Remove from animation</button>
+                </div>
             </div>
             <button id="applyChanges">Apply Changes</button>
             <button id="removeElement">Remove Selected</button>
         </div>
-        <div id="lightProperties">
+s        <div id="lightProperties">
             <h3>Light Properties</h3>
             <select id="lightTypeOption">
                 <option value="Directional" selected>Directional Light</option>
@@ -198,7 +203,6 @@
                 <input type="color" id="lightColor" class="color-pickers" name="lightColor">
             </div>
             
-
             <label for="lightPosition">Position</label>
             <div class="row" id="lightPosition">
                 <div>
@@ -210,7 +214,7 @@
                     <input type="number" id="lightPositionY" name="lightPositionY" step="0.1" value="1">
                 </div>
                 <div>
-                    <label for="lightPositionZ">Z</label>
+                    <label for="lightPositionZ">Z:</label>
                     <input type="number" id="lightPositionZ" name="lightPositionZ" step="0.1" value="1">
                 </div>
             </div>
@@ -230,8 +234,6 @@
                     <input type="number" id="lightDirectionZ" name="lightPositionZ" step="0.1" value="0">
                 </div>
             </div>
-
-
         </div>
     </div>
     <!-- <script src="js/initShaders.js"></script> -->

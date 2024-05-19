@@ -3,13 +3,16 @@ import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties } from './utils.js';
 import { getObjects } from './shapes.js';
+import { render } from './renderer.js';
 
 const allowedTextureTypes = ['image/jpeg', 'image/png'];
 const allowedModelTypes = {
     'gltf': GLTFLoader,
     'obj': OBJLoader,
 };
-
+export const animatedObjects = [];
+// Map to store initial states of animated objects
+export const initialStates = new Map();
 /**
  * Applies the color to the last object added.
  * @param {string} color - The color to apply.
@@ -128,7 +131,64 @@ function applyRotation( selectedIndex, rotationDegreesX=0, rotationDegreesY=0, r
     element.rotateY(rotationDegreesY);
     element.rotateZ(rotationDegreesZ);
 }
+/**
+ * Adds the selected object to the animated objects array and starts the rotation animation.
+ */
+export function addRotationAnimation() {
+    const selectedElementIndex = getSelectedElementIndex();
+    const objects = getObjects();
 
+    // Check if there's a valid selected element
+    if (selectedElementIndex < 0 || selectedElementIndex >= objects.length) {
+        alert("Please select a valid object.");
+        return;
+    }
+
+    const selectedObject = objects[selectedElementIndex].element;
+
+    // Store initial state if not already stored
+    if (!initialStates.has(selectedObject)) {
+        initialStates.set(selectedObject, {
+            position: selectedObject.position.clone(),
+            rotation: selectedObject.rotation.clone()
+        });
+    }
+
+    // Add the selected object to the animated objects array
+    if (!animatedObjects.includes(selectedObject)) {
+        animatedObjects.push(selectedObject);
+    }
+}
+
+/**
+ * Removes the selected object from the animated objects array.
+ */
+export function removeRotationAnimation() {
+    const selectedElementIndex = getSelectedElementIndex();
+    const objects = getObjects();
+
+    // Check if there's a valid selected element
+    if (selectedElementIndex < 0 || selectedElementIndex >= objects.length) {
+        alert("Please select a valid object.");
+        return;
+    }
+
+    const selectedObject = objects[selectedElementIndex].element;
+
+    // Remove the selected object from the animated objects array
+    const index = animatedObjects.indexOf(selectedObject);
+    if (index > -1) {
+        animatedObjects.splice(index, 1);
+    }
+
+    // Restore initial state
+    if (initialStates.has(selectedObject)) {
+        const initialState = initialStates.get(selectedObject);
+        selectedObject.position.copy(initialState.position);
+        selectedObject.rotation.copy(initialState.rotation);
+        initialStates.delete(selectedObject);
+    }
+}
 
 /**
  * Applies the changes to the selected element based on user inputs.
@@ -165,6 +225,9 @@ export function applyChanges() {
             degreesToRadians(rotationZ)
         );
     }
+
+
+
 
     resetChangeObjectProperties();
     
