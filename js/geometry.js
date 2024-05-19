@@ -63,11 +63,13 @@ export function applyAppearance(scene) {
             textureFile: textureInput.files[0],
         }
         applyModelWithTexture(modelFiles, scene);
+        resetInitialObjectProperties();
         return;
     }
     // Check wether the user chose only to import a model
     else if (modelInput.files.length > 0) {
         applyModel(modelInput.files[0], scene);
+        resetInitialObjectProperties();
         return;
     }
 

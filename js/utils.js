@@ -76,7 +76,7 @@ export function degreesToRadians(degrees) {
 }
 
 /**
- * Resets all the input from the change Object partition in UI to the default values.
+ * Resets all the input from Change Objects properties section to the default values.
  */
 export function resetChangeObjectProperties() {
     document.getElementById("editRotationX").value = 0;
@@ -86,7 +86,7 @@ export function resetChangeObjectProperties() {
 }
 
 /**
- * Resets all the input from the add Object partition in UI to the default values.
+ * Resets all the input from the add Object section in UI to the default values.
  */
 export function resetInitialObjectProperties() {
     document.getElementById("width").value = 1;
@@ -100,4 +100,7 @@ export function resetInitialObjectProperties() {
     document.getElementById("InitialPositionX").value = 0;
     document.getElementById("InitialPositionY").value = 0;
     document.getElementById("InitialPositionZ").value = 0;
+
+    document.getElementById("modelInput").value = "";
+    document.getElementById("initialTexture").value = "";
 }
