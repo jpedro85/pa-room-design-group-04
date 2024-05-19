@@ -11,18 +11,37 @@ let objects = [];
  * @param {number} sizeProperties.width - The width of the cube.
  * @param {number} sizeProperties.height - The height of the cube.
  * @param {number} sizeProperties.depth - The depth of the cube.
+ * @param {Object} initialRotationProperties - The initial rotation properties for the cube.
+ * @param {number} initialRotationProperties.x - The x rotation in radians.
+ * @param {number} initialRotationProperties.y - The y rotation in radians.
+ * @param {number} initialRotationProperties.z - The z rotation in radians.
+ * @param {Object} initialPositionProperties - The initial Position properties for the cube.
+ * @param {number} initialPositionProperties.x - The x Position.
+ * @param {number} initialPositionProperties.y - The y Position.
+ * @param {number} initialPositionProperties.z - The z Position.
  */
-export function addCube(scene, sizeProperties) {
+export function addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties ) {
 	const name = getObjectNameFromInput();
 	//const material = new THREE.MeshBasicMaterial();
 	const material = new THREE.MeshPhongMaterial( { emissive:"#000000", shininess:150 } );
 	const geometry = new THREE.BoxGeometry(sizeProperties.width, sizeProperties.height, sizeProperties.depth);
 	const cube = new THREE.Mesh(geometry, material);
+
+    cube.position.set(
+        initialPositionProperties.x,
+        initialPositionProperties.y,
+        initialPositionProperties.z
+    );
+    
+    cube.rotateX(initialRotationProperties.x);
+    cube.rotateY(initialRotationProperties.y);
+    cube.rotateZ(initialRotationProperties.z);
+
 	scene.add(cube);
 	addObjectToList(cube, name);
 }
 
-// TODO: Check how we can make a retangular pyramid using the custom size
+// TODO: Check how we can make a rectangular pyramid using the custom size
 /**
  * Adds a pyramid to the scene with the specified size properties.
  * @param {THREE.Scene} scene - The scene to add the pyramid to.
@@ -30,17 +49,38 @@ export function addCube(scene, sizeProperties) {
  * @param {number} sizeProperties.width - The width of the pyramid.
  * @param {number} sizeProperties.height - The height of the pyramid.
  * @param {number} sizeProperties.depth - The depth of the pyramid.
+ * @param {Object} initialRotationProperties - The initial rotation properties for the pyramid.
+ * @param {number} initialRotationProperties.x - The x rotation in radians.
+ * @param {number} initialRotationProperties.y - The y rotation in radians.
+ * @param {number} initialRotationProperties.z - The z rotation in radians.
+ * @param {Object} initialPositionProperties - The initial Position properties for the pyramid.
+ * @param {number} initialPositionProperties.x - The x Position.
+ * @param {number} initialPositionProperties.y - The y Position.
+ * @param {number} initialPositionProperties.z - The z Position.
  */
-export function addPyramid(scene, sizeProperties) {
+export function addPyramid(scene, sizeProperties , initialRotationProperties, initialPositionProperties ) {
 	const radius = sizeProperties.width >= sizeProperties.depth ? sizeProperties.width : sizeProperties.depth;
 
 	const name = getObjectNameFromInput();
-	const material = new THREE.MeshBasicMaterial();
+	//const material = new THREE.MeshBasicMaterial();
+	const material = new THREE.MeshPhongMaterial( { emissive:"#000000", shininess:150 } );
 	const geometry = new THREE.ConeGeometry(radius, 1, 4);
 	const pyramid = new THREE.Mesh(geometry, material);
+
+    pyramid.position.set(
+        initialPositionProperties.x,
+        initialPositionProperties.y,
+        initialPositionProperties.z
+    );
+
+    pyramid.rotateX(initialRotationProperties.x);
+    pyramid.rotateY(initialRotationProperties.y);
+    pyramid.rotateZ(initialRotationProperties.z);
+
 	scene.add(pyramid);
 	addObjectToList(pyramid, name);
 }
+
 
 /**
  * Add the objetElement to objects list that will be shown on the elements selection
@@ -69,7 +109,9 @@ export function getObjects() {
  */
 export function addPlanes(scene)
 {
-    const material = new THREE.MeshBasicMaterial( {color: 0x808080, side: THREE.DoubleSide} );
+    //const material = new THREE.MeshBasicMaterial();
+	const material = new THREE.MeshPhongMaterial( { color: 0x808080, emissive:"#1A1A1A", shininess:100 , side: THREE.DoubleSide} );
+    //const material = new THREE.MeshBasicMaterial( {color: 0x808080, side: THREE.DoubleSide} );
     const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Black border
 
     let planeLeft = createPlane(edgeMaterial,material,4,4);

@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { addCube, addPyramid } from './shapes.js';
 import { applyColor, applyModel } from './appearance.js';
+import { degreesToRadians , resetInitialObjectProperties } from './utils.js';
 
 /**
  * Applies the chosen appearance to the selected element in the scene.
@@ -20,15 +21,27 @@ export function applyAppearance(scene) {
         depth: parseFloat(document.getElementById('depth').value),
     };
 
+    const initialRotationProperties = {
+        x: degreesToRadians( parseFloat(document.getElementById('InitialRotationX').value)),
+        y: degreesToRadians( parseFloat(document.getElementById('InitialRotationY').value)),
+        z: degreesToRadians( parseFloat(document.getElementById('InitialRotationZ').value))
+    };
+
+    const initialPositionProperties = {
+        x: parseFloat(document.getElementById('InitialPositionX').value),
+        y: parseFloat(document.getElementById('InitialPositionY').value),
+        z: parseFloat(document.getElementById('InitialPositionZ').value)
+    };
+
     let objectCreated = false;
 
     switch (primitiveOption.value) {
         case 'cube':
-            addCube(scene, sizeProperties);
+            addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
             objectCreated = true;
             break;
         case 'pyramid':
-            addPyramid(scene, sizeProperties);
+            addPyramid(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
             objectCreated = true;
             break;
         default:
@@ -45,4 +58,5 @@ export function applyAppearance(scene) {
         return;
     }
     applyColor(colorPicker.value);
+    resetInitialObjectProperties();
 }
