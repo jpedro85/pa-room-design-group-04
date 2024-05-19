@@ -51,23 +51,19 @@ export function applyAppearance(scene) {
         return;
     }
 
-    let objectCreated = false;
     let sceneObject;
     switch (primitiveOption.value) {
         case 'cube':
             sceneObject = addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
-            objectCreated = true;
             break;
         case 'pyramid':
             sceneObject = addPyramid(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
-            objectCreated = true;
             break;
         default:
             alert('Invalid Primitive chosen');
     }
 
-    if (!objectCreated) {
-        alert("No object was created.");
+    if (!sceneObject) {
         return;
     }
 

@@ -3,15 +3,17 @@ import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties, fileToDataURL, scaleModelToFitCanvas, getObjectNameFromInput } from './utils.js';
 import { addObjectToList, getObjects } from './shapes.js';
 
+const MAX_MODELS = 5;
+
 const allowedTextureTypes = ['image/jpeg', 'image/png'];
 const allowedModelTypes = {
     'obj': OBJLoader,
 };
 
 export const animatedObjects = [];
-
-// Map to store initial states of animated objects
 export const initialStates = new Map();
+
+let modelsInScene = 0;
 
 /**
  * Applies the color to the last object added.
@@ -31,6 +33,11 @@ export function applyColor(color, object) {
  * @param {THREE.Scene} scene - The scene to add the object
  */
 export function addModel(modelFile, scene) {
+    if (modelsInScene == MAX_MODELS) {
+        alert("Can't add more than 5 models to the scene!")
+        return;
+    }
+
     const fileNameParts = modelFile.name.split(".");
     const typeFromName = fileNameParts[fileNameParts.length - 1];
 
@@ -49,6 +56,7 @@ export function addModel(modelFile, scene) {
         addModelToScene(object, scene);
     };
     reader.readAsText(modelFile);
+    modelsInScene++;
 }
 
 /**
@@ -84,6 +92,10 @@ function addModelToScene(model, scene) {
  * @param {THREE.Scene} scene - The scene to add the object
  */
 export async function addModelWithTexture(modelFiles, scene) {
+    if (modelsInScene == MAX_MODELS) {
+        alert("Can't add more than 5 models to the scene!")
+        return;
+    }
 
     const { modelFile, textureFile } = modelFiles;
     const fileNameParts = modelFile.name.split(".");
@@ -104,7 +116,7 @@ export async function addModelWithTexture(modelFiles, scene) {
         addModelWithTextureToScene(object, textureFile, scene);
     };
     reader.readAsText(modelFile);
-
+    modelsInScene++;
 }
 
 /**
@@ -311,29 +323,7 @@ export function applyChanges() {
         );
     }
 
-
-
-
     resetChangeObjectProperties();
-
-}
-
-/**
- * Handles the change in appearance options by displaying the appropriate input elements.
- * Shows the color picker if 'color' is selected, otherwise shows the model input.
- */
-export function handleAppearanceOptionChange() {
-    const appearanceOptions = document.getElementById('appearanceOptions');
-    const colorPicker = document.getElementById('colorPicker');
-    const modelInput = document.getElementById('modelInput');
-
-    if (appearanceOptions.value === 'color') {
-        colorPicker.style.display = 'block';
-        modelInput.style.display = 'none';
-    } else if (appearanceOptions.value === 'model') {
-        colorPicker.style.display = 'none';
-        modelInput.style.display = 'block';
-    }
 }
 
 /**

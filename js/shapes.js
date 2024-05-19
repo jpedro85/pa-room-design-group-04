@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import { getColorFlag, getObjectNameFromInput, updateElementList } from './utils.js';
 import { degreesToRadians } from './utils.js';
 
+const MAX_PRIMITIVES = 10;
+
 /**
  * @typedef {Object} SceneObject
  * @property {THREE.Mesh} element - The mesh element of the object.
@@ -14,6 +16,7 @@ import { degreesToRadians } from './utils.js';
  * @type {SceneObject[]}
  */
 let objects = [];
+let primitivesInScene = 0;
 
 /**
  * Adds a cube to the scene with the specified size properties.
@@ -34,6 +37,10 @@ let objects = [];
  * @returns {SceneObject} The resulting sceneObject thats added to the objects List;
  */
 export function addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties) {
+    if (primitivesInScene == MAX_PRIMITIVES) {
+        alert("Can't add more than 10 primitives to the scene (Squares and Pryramids)!")
+        return;
+    }
 
     const name = getObjectNameFromInput();
     const material = new THREE.MeshPhongMaterial({ emissive: "#000000", shininess: 150 });
@@ -58,6 +65,7 @@ export function addCube(scene, sizeProperties, initialRotationProperties, initia
         colorFlag: getColorFlag(),
     }
     addObjectToList(sceneObject);
+    primitivesInScene++;
     return sceneObject;
 }
 
@@ -80,6 +88,11 @@ export function addCube(scene, sizeProperties, initialRotationProperties, initia
  * @returns {SceneObject} The resulting sceneObject thats added to the objects List;
  */
 export function addPyramid(scene, sizeProperties, initialRotationProperties, initialPositionProperties) {
+    if (primitivesInScene == MAX_PRIMITIVES) {
+        alert("Can't add more than 10 primitives to the scene (Squares and Pryramids)!")
+        return;
+    }
+
     const radius = sizeProperties.width >= sizeProperties.depth ? sizeProperties.width : sizeProperties.depth;
 
     const name = getObjectNameFromInput();
@@ -141,7 +154,7 @@ export function addPlanes(scene) {
     planeLeft.position.set(-10, 0, 0);
     scene.add(planeLeft);
 
-    let planeBack = createPlane(edgeMaterial,material, 20, 20);
+    let planeBack = createPlane(edgeMaterial, material, 20, 20);
     planeBack.position.set(0, 0, -10);
     scene.add(planeBack);
 }
