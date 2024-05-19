@@ -109,7 +109,9 @@ export function getObjects() {
  */
 export function addPlanes(scene)
 {
-    const material = new THREE.MeshBasicMaterial( {color: 0x808080, side: THREE.DoubleSide} );
+    //const material = new THREE.MeshBasicMaterial();
+	const material = new THREE.MeshPhongMaterial( { color: 0x808080, emissive:"#1A1A1A", shininess:100 , side: THREE.DoubleSide} );
+    //const material = new THREE.MeshBasicMaterial( {color: 0x808080, side: THREE.DoubleSide} );
     const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Black border
 
     let planeLeft = createPlane(edgeMaterial,material,4,4);

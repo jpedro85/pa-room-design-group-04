@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { addCube, addPyramid } from './shapes.js';
 import { applyColor, applyModel } from './appearance.js';
-import { degreesToRadians } from './utils.js';
+import { degreesToRadians , resetInitialObjectProperties } from './utils.js';
 
 /**
  * Applies the chosen appearance to the selected element in the scene.
@@ -58,4 +58,5 @@ export function applyAppearance(scene) {
         return;
     }
     applyColor(colorPicker.value);
+    resetInitialObjectProperties();
 }

@@ -69,3 +69,36 @@ export function degreesToRadians( degrees )
 {
     return degrees * Math.PI / 180;
 }
+
+/**
+ * Resets all the input from the change Object partition in UI to the default values.
+ *
+ * @return  {void} 
+ */
+export function resetChangeObjectProperties()
+{
+    document.getElementById("editRotationX").value = 0;
+    document.getElementById("editRotationY").value = 0;
+    document.getElementById("editRotationZ").value = 0;
+    document.getElementById("scale").value = 1;
+}
+
+/**
+ * Resets all the input from the add Object partition in UI to the default values.
+ *
+ * @return  {void} 
+ */
+export function resetInitialObjectProperties()
+{
+    document.getElementById("width").value = 1;
+    document.getElementById("depth").value = 1;
+    document.getElementById("height").value = 1;
+
+    document.getElementById("InitialRotationX").value = 0;
+    document.getElementById("InitialRotationY").value = 0;
+    document.getElementById("InitialRotationZ").value = 0;
+
+    document.getElementById("InitialPositionX").value = 0;
+    document.getElementById("InitialPositionY").value = 0;
+    document.getElementById("InitialPositionZ").value = 0;
+}

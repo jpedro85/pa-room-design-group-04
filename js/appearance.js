@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { degreesToRadians, getSelectedElementIndex, updateElementList } from './utils.js';
+import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties } from './utils.js';
 import { getObjects } from './shapes.js';
 
 const allowedTextureTypes = ['image/jpeg', 'image/png'];
@@ -155,7 +155,7 @@ export function applyChanges() {
     }
     if (scaleValue) {
         applyScale(scaleValue, selectedElementIndex);
-        scaleInput.value = 1;
+       // scaleInput.value = 1;
     }
     if( rotationX || rotationY || rotationZ )
     {
@@ -165,6 +165,8 @@ export function applyChanges() {
             degreesToRadians(rotationZ)
         );
     }
+
+    resetChangeObjectProperties();
     
 } 
 
