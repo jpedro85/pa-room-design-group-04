@@ -1,16 +1,18 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties, fileToDataURL, scaleModelToFitCanvas, getColorFlag } from './utils.js';
-import { getObjects } from './shapes.js';
-import { render } from './renderer.js';
+import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties, fileToDataURL, scaleModelToFitCanvas, getObjectNameFromInput } from './utils.js';
+import { addObjectToList, getObjects } from './shapes.js';
 
 const allowedTextureTypes = ['image/jpeg', 'image/png'];
 const allowedModelTypes = {
     'obj': OBJLoader,
 };
+
 export const animatedObjects = [];
+
 // Map to store initial states of animated objects
 export const initialStates = new Map();
+
 /**
  * Applies the color to the last object added.
  * @param {string} color - The color to apply.
@@ -24,12 +26,11 @@ export function applyColor(color, object) {
 }
 
 /**
- * Applies the model to the last object added.
- * @param {File} modelProperties - The properties of the model.
+ * Adds the model to the scene
+ * @param {File} modelFile - The model file thats going to be imported
  * @param {THREE.Scene} scene - The scene to add the object
  */
-export function applyModel(modelProperties, scene) {
-    const { modelFile, color } = modelProperties;
+export function addModel(modelFile, scene) {
     const fileNameParts = modelFile.name.split(".");
     const typeFromName = fileNameParts[fileNameParts.length - 1];
 
@@ -45,23 +46,17 @@ export function applyModel(modelProperties, scene) {
     reader.onload = (event) => {
         const contents = event.target.result;
         const object = loader.parse(contents);
-        replaceLastObjectWithModel(object, color, scene);
+        addModelToScene(object, scene);
     };
     reader.readAsText(modelFile);
 }
 
 /**
- * Replaces the last object in the scene with the given model.
+ * Adds the imported model to scene
  * @param {THREE.Mesh} model - The model to replace the last object with.
- * @param {string} color - The color for the model.
  * @param {THREE.Scene} scene - The scene to replace the object.
  */
-function replaceLastObjectWithModel(model, color, scene) {
-    const objects = getObjects();
-    if (objects.length === 0) return;
-
-    const lastObject = objects[objects.length - 1].element;
-    scene.remove(lastObject);
+function addModelToScene(model, scene) {
 
     if (!model.material) {
         const material = new THREE.MeshPhongMaterial({ emissive: "#000000", shininess: 150 });
@@ -72,19 +67,23 @@ function replaceLastObjectWithModel(model, color, scene) {
 
     scene.add(model);
 
-    objects[objects.length - 1].element = model;
-    updateElementList(objects);
+    const sceneObject = {
+        element: model,
+        name: getObjectNameFromInput(),
+        colorFlag: false,
+    }
+    addObjectToList(sceneObject)
     console.log("Model applied:", model);
 }
 
 /**
- * Applies the model to the last object added.
+ * Adds Object with Texture to the scene
  * @param {Object} modelFiles - The model file to apply.
- * @param {File} modelFiles.modelFile -
- * @param {File} modelFiles.textureFile -
+ * @param {File} modelFiles.modelFile - The model file thats being imported.
+ * @param {File} modelFiles.textureFile - The texture file thats going to be applied to the model.
  * @param {THREE.Scene} scene - The scene to add the object
  */
-export async function applyModelWithTexture(modelFiles, scene) {
+export async function addModelWithTexture(modelFiles, scene) {
 
     const { modelFile, textureFile } = modelFiles;
     const fileNameParts = modelFile.name.split(".");
@@ -99,12 +98,13 @@ export async function applyModelWithTexture(modelFiles, scene) {
     const loader = new LoaderClass();
 
     const reader = new FileReader();
-    reader.onload = async (event) => {
+    reader.onload = (event) => {
         const contents = event.target.result;
         const object = loader.parse(contents);
-        replaceLastObjectWithModelWithTexture(object, textureFile, scene);
+        addModelWithTextureToScene(object, textureFile, scene);
     };
     reader.readAsText(modelFile);
+
 }
 
 /**
@@ -113,12 +113,7 @@ export async function applyModelWithTexture(modelFiles, scene) {
  * @param {File} texture - The texture to be applied on the object
  * @param {THREE.Scene} scene - The scene to replace the object.
  */
-function replaceLastObjectWithModelWithTexture(model, texture, scene) {
-    const objects = getObjects();
-    if (objects.length === 0) return;
-
-    const lastObject = objects[objects.length - 1].element;
-    scene.remove(lastObject);
+function addModelWithTextureToScene(model, texture, scene) {
 
     model.traverse(async (child) => {
         if (child.isMesh) {
@@ -134,9 +129,13 @@ function replaceLastObjectWithModelWithTexture(model, texture, scene) {
 
     scene.add(model);
 
-    objects[objects.length - 1].element = model;
-    updateElementList(objects);
-
+    const sceneObject = {
+        element: model,
+        name: getObjectNameFromInput(),
+        // Doesn't work on the models
+        colorFlag: false,
+    }
+    addObjectToList(sceneObject)
     console.log("Model ", model.name, " applied with Texture:", model);
 }
 
@@ -177,7 +176,7 @@ export function applyTexture(file, selectedElementIndex) {
  * @note This function is only used for the primitives initial procedure to add to the scene
  */
 export function applyTextureToElement(file, sceneObject) {
-    const {element, colorFlag} = sceneObject;
+    const { element, colorFlag } = sceneObject;
     if (!allowedTextureTypes.includes(file.type)) {
         alert('Invalid file type. Please select an image file (jpeg, png, gif).');
         return;
@@ -218,6 +217,7 @@ function applyRotation(selectedIndex, rotationDegreesX = 0, rotationDegreesY = 0
     element.rotateY(rotationDegreesY);
     element.rotateZ(rotationDegreesZ);
 }
+
 /**
  * Adds the selected object to the animated objects array and starts the rotation animation.
  */

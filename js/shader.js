@@ -25,8 +25,6 @@ export function shaderObjectExampleStart(scene, camera, renderer)
  */
 function init(scene,camera,renderer) {
 
-    const container = document.getElementById( 'container' );
-
     clock = new THREE.Clock();
 
     const textureLoader = new THREE.TextureLoader();
@@ -48,10 +46,7 @@ function init(scene,camera,renderer) {
         'texture2': { value: lavaTexture }
     };
 
-    const size = 0.65;
-
     const material = new THREE.ShaderMaterial( {
-
         uniforms: uniforms,
         vertexShader: document.getElementById( 'vertexShader' ).textContent,
         fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
@@ -59,7 +54,6 @@ function init(scene,camera,renderer) {
 
     } );
 
-    //mesh = new THREE.Mesh( new THREE.TorusGeometry( size, 0.3, 30, 30 ), material );
     mesh = new THREE.Mesh( new THREE.PlaneGeometry(4,4), material );
     mesh.rotateX(degreesToRadians(90));
     mesh.position.y = -2;
@@ -83,17 +77,6 @@ function init(scene,camera,renderer) {
 
 }
 
-// function onWindowResize() {
-
-//     camera.aspect = window.innerWidth / window.innerHeight;
-//     camera.updateProjectionMatrix();
-
-//     renderer.setSize( window.innerWidth, window.innerHeight );
-//     composer.setSize( window.innerWidth, window.innerHeight );
-
-// }
-
-
 function animate() {
 
     requestAnimationFrame( animate );
@@ -108,10 +91,5 @@ function render() {
 
     uniforms[ 'time' ].value += 0.2 * delta;
 
-    // mesh.rotation.y += 0.0125 * delta;
-    // mesh.rotation.x += 0.05 * delta;
-
-    //renderer.clear();
     composer.render( 0.01 );
-
 }

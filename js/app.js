@@ -22,8 +22,8 @@ function init() {
     const renderer = initRenderer(canvas);
     const camera = initCamera(canvas);
     const scene = initScene();
-    const ambientLight = addAmbientLight(scene,"#ece1bc",10);
-    shaderObjectExampleStart(scene,camera,renderer);
+    const ambientLight = addAmbientLight(scene, "#ece1bc", 1);
+    shaderObjectExampleStart(scene, camera, renderer);
     addPlanes(scene);
 
     setupEventListeners(scene, renderer, camera);

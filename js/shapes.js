@@ -113,7 +113,7 @@ export function addPyramid(scene, sizeProperties, initialRotationProperties, ini
  * Add the objetElement to objects list that will be shown on the elements selection
  * @param {SceneObject} sceneObject - The object to be added to the List
  */
-function addObjectToList(sceneObject) {
+export function addObjectToList(sceneObject) {
     objects.push(sceneObject);
     updateElementList(objects);
     console.log('Object added:', sceneObject);

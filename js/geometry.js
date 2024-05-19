@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { addCube, addPyramid } from './shapes.js';
-import { applyColor, applyModel, applyModelWithTexture, applyTexture, applyTextureToElement } from './appearance.js';
+import { applyColor, addModel, addModelWithTexture, applyTextureToElement } from './appearance.js';
 import { degreesToRadians, resetInitialObjectProperties } from './utils.js';
 
 /**
@@ -33,9 +33,26 @@ export function applyAppearance(scene) {
         z: parseFloat(document.getElementById('InitialPositionZ').value)
     };
 
+    // Checks if theres is a model to import and if the user has chosen to apply a texture
+    if (modelInput.files.length > 0 && textureInput.files.length > 0) {
+        const modelFiles = {
+            modelFile: modelInput.files[0],
+            textureFile: textureInput.files[0],
+        }
+        addModelWithTexture(modelFiles, scene);
+        resetInitialObjectProperties();
+        return;
+    }
+    // Check wether the user chose only to import a model
+    else if (modelInput.files.length > 0) {
+        const modelFile = modelInput.files[0];
+        addModel(modelFile, scene);
+        resetInitialObjectProperties();
+        return;
+    }
+
     let objectCreated = false;
     let sceneObject;
-    // TODO: Clean this by converting into an object of objects to reduce number of params
     switch (primitiveOption.value) {
         case 'cube':
             sceneObject = addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
@@ -51,29 +68,6 @@ export function applyAppearance(scene) {
 
     if (!objectCreated) {
         alert("No object was created.");
-        return;
-    }
-
-    // TODO: Pass this to be checked first before adding primitives
-
-    // Checks if theres is a model to import and if the user has chosen to apply a texture
-    if (modelInput.files.length > 0 && textureInput.files.length > 0) {
-        const modelFiles = {
-            modelFile: modelInput.files[0],
-            textureFile: textureInput.files[0],
-        }
-        applyModelWithTexture(modelFiles, scene);
-        resetInitialObjectProperties();
-        return;
-    }
-    // Check wether the user chose only to import a model
-    else if (modelInput.files.length > 0) {
-        const modelProperties = {
-            modelFile: modelInput.files[0],
-            color: colorPicker.value,
-        }
-        applyModel(modelProperties, scene);
-        resetInitialObjectProperties();
         return;
     }
 
