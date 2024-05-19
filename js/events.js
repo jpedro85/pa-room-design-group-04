@@ -1,7 +1,7 @@
 import {removeRotationAnimation,addRotationAnimation, applyChanges, handleAppearanceOptionChange } from './appearance.js';
 import { applyAppearance } from './geometry.js';
 import { movementHandler } from './movement.js';
-import { removeElement } from './utils.js';
+import { colorFlagHandler, removeElement } from './utils.js';
 import { addLight } from './light.js';
 
 /**
@@ -12,6 +12,7 @@ import { addLight } from './light.js';
  * @param {THREE.Scene} scene - The scene to interact with.
  */
 export function setupEventListeners(scene) {
+    document.getElementById('colorFlag').addEventListener('change', () => colorFlagHandler());
     document.getElementById('addPrimitive').addEventListener('click', () => applyAppearance(scene));
     document.getElementById('applyChanges').addEventListener('click', () => applyChanges());
     document.getElementById('removeElement').addEventListener('click', () => removeElement(scene));

@@ -1,11 +1,12 @@
 import * as THREE from 'three';
-import { getObjectNameFromInput, updateElementList } from './utils.js';
+import { getColorFlag, getObjectNameFromInput, updateElementList } from './utils.js';
 import { degreesToRadians } from './utils.js';
 
 /**
  * @typedef {Object} SceneObject
  * @property {THREE.Mesh} element - The mesh element of the object.
  * @property {string} name - The name of the object.
+ * @property {boolean} colorFlag - Wether the object allows the texture to have color
  */
 
 /**
@@ -29,13 +30,15 @@ let objects = [];
  * @param {number} initialPositionProperties.x - The x Position.
  * @param {number} initialPositionProperties.y - The y Position.
  * @param {number} initialPositionProperties.z - The z Position.
+ *
+ * @returns {SceneObject} The resulting sceneObject thats added to the objects List;
  */
-export function addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties ) {
+export function addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties) {
 
-	const name = getObjectNameFromInput();
-	const material = new THREE.MeshPhongMaterial( { emissive:"#000000", shininess:150 } );
-	const geometry = new THREE.BoxGeometry(sizeProperties.width, sizeProperties.height, sizeProperties.depth);
-	const cube = new THREE.Mesh(geometry, material);
+    const name = getObjectNameFromInput();
+    const material = new THREE.MeshPhongMaterial({ emissive: "#000000", shininess: 150 });
+    const geometry = new THREE.BoxGeometry(sizeProperties.width, sizeProperties.height, sizeProperties.depth);
+    const cube = new THREE.Mesh(geometry, material);
 
     cube.position.set(
         initialPositionProperties.x,
@@ -47,9 +50,15 @@ export function addCube(scene, sizeProperties, initialRotationProperties, initia
     cube.rotateY(initialRotationProperties.y);
     cube.rotateZ(initialRotationProperties.z);
 
-	scene.add(cube);
-	addObjectToList(cube, name);
-    return cube;
+    scene.add(cube);
+
+    const sceneObject = {
+        element: cube,
+        name: name,
+        colorFlag: getColorFlag(),
+    }
+    addObjectToList(sceneObject);
+    return sceneObject;
 }
 
 /**
@@ -67,14 +76,16 @@ export function addCube(scene, sizeProperties, initialRotationProperties, initia
  * @param {number} initialPositionProperties.x - The x Position.
  * @param {number} initialPositionProperties.y - The y Position.
  * @param {number} initialPositionProperties.z - The z Position.
+ *
+ * @returns {SceneObject} The resulting sceneObject thats added to the objects List;
  */
-export function addPyramid(scene, sizeProperties , initialRotationProperties, initialPositionProperties ) {
-	const radius = sizeProperties.width >= sizeProperties.depth ? sizeProperties.width : sizeProperties.depth;
+export function addPyramid(scene, sizeProperties, initialRotationProperties, initialPositionProperties) {
+    const radius = sizeProperties.width >= sizeProperties.depth ? sizeProperties.width : sizeProperties.depth;
 
-	const name = getObjectNameFromInput();
-	const material = new THREE.MeshPhongMaterial( { emissive:"#000000", shininess:150 } );
-	const geometry = new THREE.ConeGeometry(radius, 1, 4);
-	const pyramid = new THREE.Mesh(geometry, material);
+    const name = getObjectNameFromInput();
+    const material = new THREE.MeshPhongMaterial({ emissive: "#000000", shininess: 150 });
+    const geometry = new THREE.ConeGeometry(radius, 1, 4);
+    const pyramid = new THREE.Mesh(geometry, material);
 
     pyramid.position.set(
         initialPositionProperties.x,
@@ -86,22 +97,26 @@ export function addPyramid(scene, sizeProperties , initialRotationProperties, in
     pyramid.rotateY(initialRotationProperties.y);
     pyramid.rotateZ(initialRotationProperties.z);
 
-	scene.add(pyramid);
-	addObjectToList(pyramid, name);
-    return pyramid;
+    scene.add(pyramid);
+
+    const sceneObject = {
+        element: pyramid,
+        name: name,
+        colorFlag: getColorFlag(),
+    }
+    addObjectToList(sceneObject);
+    return sceneObject;
 }
 
 
 /**
  * Add the objetElement to objects list that will be shown on the elements selection
- * @param {string} name - The name if exist for the object otherwise will be Elment Index
- * @param {THREE.Mesh} element - The 3D object created by Three.js
+ * @param {SceneObject} sceneObject - The object to be added to the List
  */
-function addObjectToList(element, name) {
-	const objectElement = { element, name };
-	objects.push(objectElement);
-	updateElementList(objects);
-	console.log('Object added:', objectElement);
+function addObjectToList(sceneObject) {
+    objects.push(sceneObject);
+    updateElementList(objects);
+    console.log('Object added:', sceneObject);
 }
 
 /**
@@ -109,7 +124,7 @@ function addObjectToList(element, name) {
  * @returns {SceneObject[]} object - The list of object inside the canvas
  */
 export function getObjects() {
-	return objects;
+    return objects;
 }
 
 
@@ -117,12 +132,11 @@ export function getObjects() {
  * [description]
  * @param {THREE.scene} scene - The scene to add the planes
  */
-export function addPlanes(scene)
-{
-	const material = new THREE.MeshPhongMaterial( { color: 0x808080, emissive:"#1A1A1A", shininess:100 , side: THREE.DoubleSide} );
+export function addPlanes(scene) {
+    const material = new THREE.MeshPhongMaterial({ color: 0x808080, emissive: "#1A1A1A", shininess: 100, side: THREE.DoubleSide });
     const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x000000 }); // Black border
 
-    let planeLeft = createPlane(edgeMaterial,material,4,4);
+    let planeLeft = createPlane(edgeMaterial, material, 4, 4);
     planeLeft.rotateY(degreesToRadians(90));
     planeLeft.position.set(-2, 0, 0);
     scene.add(planeLeft);
@@ -143,9 +157,8 @@ export function addPlanes(scene)
  *
  * @return  {THREE.Mesh} The Mesh of the created plane.
  */
-export function createPlane( edgeMaterial , material, height, width)
-{
-    let planeGeometry = new THREE.PlaneGeometry( width, height );
+export function createPlane(edgeMaterial, material, height, width) {
+    let planeGeometry = new THREE.PlaneGeometry(width, height);
     let planeMesh = new THREE.Mesh(planeGeometry, material);
 
     let edgesGeometry = new THREE.EdgesGeometry(planeGeometry);

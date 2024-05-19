@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties, fileToDataURL, scaleModelToFitCanvas } from './utils.js';
+import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties, fileToDataURL, scaleModelToFitCanvas, getColorFlag } from './utils.js';
 import { getObjects } from './shapes.js';
 import { render } from './renderer.js';
 
@@ -14,22 +14,22 @@ export const initialStates = new Map();
 /**
  * Applies the color to the last object added.
  * @param {string} color - The color to apply.
+ * @param {THREE.Mesh} object - The object that going to have the color applied to
  */
-export function applyColor(color) {
+export function applyColor(color, object) {
     const objects = getObjects();
     if (!color || objects.length === 0) return;
-    const lastObject = objects[objects.length - 1].element;
-    lastObject.material.color.set(color);
-    console.log("Color applied:", color, "to object:", lastObject);
+    object.material.color.set(color);
+    console.log("Color applied:", color, "to object:", object);
 }
 
 /**
  * Applies the model to the last object added.
- * @param {File} modelFile - The model file to apply.
+ * @param {File} modelProperties - The properties of the model.
  * @param {THREE.Scene} scene - The scene to add the object
  */
-export function applyModel(modelFile, scene) {
-
+export function applyModel(modelProperties, scene) {
+    const { modelFile, color } = modelProperties;
     const fileNameParts = modelFile.name.split(".");
     const typeFromName = fileNameParts[fileNameParts.length - 1];
 
@@ -45,8 +45,7 @@ export function applyModel(modelFile, scene) {
     reader.onload = (event) => {
         const contents = event.target.result;
         const object = loader.parse(contents);
-        replaceLastObjectWithModel(object, scene);
-        console.log("Model applied:", object);
+        replaceLastObjectWithModel(object, color, scene);
     };
     reader.readAsText(modelFile);
 }
@@ -54,9 +53,10 @@ export function applyModel(modelFile, scene) {
 /**
  * Replaces the last object in the scene with the given model.
  * @param {THREE.Mesh} model - The model to replace the last object with.
+ * @param {string} color - The color for the model.
  * @param {THREE.Scene} scene - The scene to replace the object.
  */
-function replaceLastObjectWithModel(model, scene) {
+function replaceLastObjectWithModel(model, color, scene) {
     const objects = getObjects();
     if (objects.length === 0) return;
 
@@ -67,8 +67,6 @@ function replaceLastObjectWithModel(model, scene) {
         const material = new THREE.MeshPhongMaterial({ emissive: "#000000", shininess: 150 });
         model.material = material;
     }
-
-    model.name = lastObject.name;
 
     scaleModelToFitCanvas(model);
 
@@ -132,9 +130,6 @@ function replaceLastObjectWithModelWithTexture(model, texture, scene) {
         }
     });
 
-    // Set the model's name and add it to the scene
-    model.name = lastObject.name;
-
     scaleModelToFitCanvas(model);
 
     scene.add(model);
@@ -159,12 +154,14 @@ export function applyTexture(file, selectedElementIndex) {
     }
 
     const selectedObject = objects[selectedElementIndex].element;
+    const colorFlag = objects[selectedElementIndex].colorFlag;
 
     selectedObject.traverse(async (child) => {
         if (child.isMesh) {
             const textureURL = await fileToDataURL(file);
             const loadedTexture = new THREE.TextureLoader().load(textureURL, () => {
-                child.material.color = null;
+                if (!colorFlag)
+                    child.material.color = null;
                 child.material.map = loadedTexture;
                 child.material.needsUpdate = true;
             });
@@ -175,11 +172,12 @@ export function applyTexture(file, selectedElementIndex) {
 /**
  * Applies the texture to the desired object.
  * @param {File} file - The texture file to apply.
- * @param {THREE.Mesh} element - The element thats going to have the texture applied.
+ * @param {import('./shapes.js').SceneObject} sceneObject - The sceneObject thats going to have the texture applied to
  *
  * @note This function is only used for the primitives initial procedure to add to the scene
  */
-export function applyTextureToElement(file, element) {
+export function applyTextureToElement(file, sceneObject) {
+    const {element, colorFlag} = sceneObject;
     if (!allowedTextureTypes.includes(file.type)) {
         alert('Invalid file type. Please select an image file (jpeg, png, gif).');
         return;
@@ -189,7 +187,8 @@ export function applyTextureToElement(file, element) {
         if (child.isMesh) {
             const textureURL = await fileToDataURL(file);
             const loadedTexture = new THREE.TextureLoader().load(textureURL, () => {
-                child.material.color = null;
+                if (!colorFlag)
+                    child.material.color = null;
                 child.material.map = loadedTexture;
                 child.material.needsUpdate = true;
             });

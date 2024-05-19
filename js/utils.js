@@ -1,4 +1,23 @@
 import * as THREE from "three";
+import { getObjects } from "./shapes.js";
+
+let ColorFlag = false;
+
+/**
+ * Updates the ColorFlag value depending on the state of the checkBox colorFlag
+ */
+export function colorFlagHandler() {
+    ColorFlag = !ColorFlag;
+}
+
+/**
+ * Gets the Value of the ColorFlag
+ *
+ * @returns {boolean} ColorFlag - Value of the ColorFlag
+ */
+export function getColorFlag() {
+    return ColorFlag;
+}
 
 /**
  * Updates the element list in the select dropdown with the given objects.
@@ -32,7 +51,7 @@ export function getSelectedElementIndex() {
 /**
  * Gets the object name from the input
  *
- * @returns The input string, if there is no input doesn't return anything
+ * @returns {string} The input string, if there is no input doesn't return anything
  */
 export function getObjectNameFromInput() {
     const input = document.getElementById("obj-name");
@@ -43,7 +62,11 @@ export function getObjectNameFromInput() {
     }
 }
 
+/**
+ * Removes a specified object from the scene
+ */
 export function removeElement(scene) {
+    const objects = getObjects();
     const selectedIndex = getSelectedElementIndex();
     if (selectedIndex >= 0) {
         scene.remove(objects[selectedIndex].element);

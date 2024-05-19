@@ -8,7 +8,7 @@
 <body>
 
     <!-- start scripts for Shader -->
-  
+
     <script id="fragmentShader" type="x-shader/x-fragment">
 
         uniform float time;
@@ -94,10 +94,16 @@
         <div id="addObject">
             <h3>Add Object</h3>
             <input type="text" id="obj-name" placeholder="Input the object Name" />
-            <select id="primitive">
-                <option value="cube" selected>Cube</option>
-                <option value="pyramid">Pyramid</option>
-            </select>
+            <div class="primitive-options">
+                <select id="primitive">
+                    <option value="cube" selected>Cube</option>
+                    <option value="pyramid">Pyramid</option>
+                </select>
+                <div class="checkbox-container">
+                    <label for="colorFlag">Activate color on Texture</label>
+                    <input type="checkbox" id="colorFlag">
+                </div>
+            </div>
             <div class="size-option">
                 <div>
                     <label for="width">Width:</label>
@@ -191,7 +197,7 @@
             <button id="applyChanges">Apply Changes</button>
             <button id="removeElement">Remove Selected</button>
         </div>
-s        <div id="lightProperties">
+        <div id="lightProperties">
             <h3>Light Properties</h3>
             <select id="lightTypeOption">
                 <option value="Directional" selected>Directional Light</option>
@@ -217,7 +223,7 @@ s        <div id="lightProperties">
                     <input type="number" id="lightPositionZ" name="lightPositionZ" step="0.1" value="1">
                 </div>
             </div>
-            
+
             <label id="lightDirectionLabel" for="lightDirection">Direction</label>
             <div class="row" id="lightDirection">
                 <div>

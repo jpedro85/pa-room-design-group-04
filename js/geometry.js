@@ -34,15 +34,15 @@ export function applyAppearance(scene) {
     };
 
     let objectCreated = false;
-    let object;
+    let sceneObject;
     // TODO: Clean this by converting into an object of objects to reduce number of params
     switch (primitiveOption.value) {
         case 'cube':
-            object = addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
+            sceneObject = addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
             objectCreated = true;
             break;
         case 'pyramid':
-            object = addPyramid(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
+            sceneObject = addPyramid(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
             objectCreated = true;
             break;
         default:
@@ -68,15 +68,19 @@ export function applyAppearance(scene) {
     }
     // Check wether the user chose only to import a model
     else if (modelInput.files.length > 0) {
-        applyModel(modelInput.files[0], scene);
+        const modelProperties = {
+            modelFile: modelInput.files[0],
+            color: colorPicker.value,
+        }
+        applyModel(modelProperties, scene);
         resetInitialObjectProperties();
         return;
     }
 
+    // Primitives Texture
+    applyColor(colorPicker.value, sceneObject.element);
     if (textureInput.files.length > 0) {
-        applyTextureToElement(textureInput.files[0], object)
-    } else {
-        applyColor(colorPicker.value);
+        applyTextureToElement(textureInput.files[0], sceneObject)
     }
 
     resetInitialObjectProperties();
