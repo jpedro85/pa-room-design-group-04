@@ -4,6 +4,7 @@ import { initCamera } from './camera.js';
 import { setupEventListeners } from './events.js';
 import { addAmbientLight } from './light.js';
 import { addPlanes } from './shapes.js';
+import { shaderObjectExampleStart } from './shader.js'
 
 /**
  * Initializes the application once the window is loaded.
@@ -21,7 +22,8 @@ function init() {
     const renderer = initRenderer(canvas);
     const camera = initCamera(canvas);
     const scene = initScene();
-    const ambientLight = addAmbientLight(scene,"#ece1bc",1);
+    const ambientLight = addAmbientLight(scene,"#ece1bc",10);
+    shaderObjectExampleStart(scene,camera,renderer);
     addPlanes(scene);
 
     setupEventListeners(scene, renderer, camera);

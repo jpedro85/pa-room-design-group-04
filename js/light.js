@@ -59,7 +59,7 @@ function addDirectionLight(scene, position, color)
     const vectorDirectionY = parseFloat(document.getElementById('lightDirectionY').value);
     const vectorDirectionZ = parseFloat(document.getElementById('lightDirectionZ').value);
     
-    const light = new THREE.DirectionalLight( color, 4);
+    const light = new THREE.DirectionalLight( color, 14);
 
     light.position.set(position.x, position.y, position.z);
     light.target.position.set(
@@ -75,7 +75,7 @@ function addDirectionLight(scene, position, color)
 /**
  * Adds a Point Light to the scene with the color at the specified position.
  *
- * @param   {THREE.scene}  scene     The scene to add the light.
+ * @param   {THREE.scene}  scene    The scene to add the light.
  * @param   {THREE.Vector3}  position  The position of the light.
  * @param   {THREE.color}  color     The Color of the light.
  *
@@ -83,7 +83,8 @@ function addDirectionLight(scene, position, color)
  */
 function addPointLight(scene, position, color)
 { 
-    const light = new THREE.PointLight( color, 4);
+    const light = new THREE.PointLight( color, 14);
     light.position.set(position.x, position.y, position.z);
     scene.add(light);
 }
+

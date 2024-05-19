@@ -120,10 +120,10 @@ export function addPlanes(scene)
     scene.add(planeLeft);
 
  
-    let planeRight = createPlane(edgeMaterial,material,4,4);
-    planeRight.rotateX(degreesToRadians(90));
-    planeRight.position.set(0, -2, 0);
-    scene.add(planeRight);
+    // let planeRight = createPlane(edgeMaterial,material,4,4);
+    // planeRight.rotateX(degreesToRadians(90));
+    // planeRight.position.set(0, -2, 0);
+    // scene.add(planeRight);s
 
     let planeBack = createPlane(edgeMaterial,material,4,4);
     planeBack.position.set(0, 0, -2);
