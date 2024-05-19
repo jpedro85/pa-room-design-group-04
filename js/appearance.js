@@ -187,3 +187,21 @@ export function handleAppearanceOptionChange() {
         modelInput.style.display = 'block';
     }
 }
+
+/**
+ * Handles the change in appearance options by displaying the appropriate input elements.
+ * Shows the color picker if 'color' is selected, otherwise shows the model input.
+ */
+export function handleLightTypeOptionChange() {
+    const appearanceOptions = document.getElementById('lightTypeOption');
+    const lightDirection = document.getElementById('lightDirection');
+    const lightDirectionLabel = document.getElementById('lightDirectionLabel');
+
+    if (appearanceOptions.value === 'Directional') {
+        lightDirection.style.display = 'flex';
+        lightDirectionLabel.style.display = 'block';
+    } else if (appearanceOptions.value === 'Point') {
+        lightDirection.style.display = 'none';
+        lightDirectionLabel.style.display = 'none';
+    }
+}

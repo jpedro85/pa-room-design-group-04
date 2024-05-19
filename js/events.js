@@ -1,4 +1,4 @@
-import { applyChanges, handleAppearanceOptionChange } from './appearance.js';
+import { applyChanges, handleAppearanceOptionChange , handleLightTypeOptionChange} from './appearance.js';
 import { applyAppearance } from './geometry.js';
 import { movementHandler } from './movement.js';
 import { removeElement } from './utils.js';
@@ -13,6 +13,7 @@ import { addLight } from './light.js';
  */
 export function setupEventListeners(scene) {
     document.getElementById('appearanceOptions').addEventListener('change', () => handleAppearanceOptionChange());
+    document.getElementById('lightTypeOption').addEventListener('change', () => handleLightTypeOptionChange());
     document.getElementById('addPrimitive').addEventListener('click', () => applyAppearance(scene));
     document.getElementById('applyChanges').addEventListener('click', () => applyChanges());
     document.getElementById('removeElement').addEventListener('click', () => removeElement(scene));

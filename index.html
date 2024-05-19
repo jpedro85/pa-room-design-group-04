@@ -113,6 +113,10 @@
         </div>
         <div id="lightProperties">
             <h3>Light Properties</h3>
+            <select id="lightTypeOption">
+                <option value="Directional" selected>Directional Light</option>
+                <option value="Point">Point Light</option>
+            </select>
             <button id="addLight">Add Light</button>
             <div>
                 <label for="lightColor">Color:</label>
@@ -136,7 +140,7 @@
                 </div>
             </div>
             
-            <label for="lightDirection">Direction</label>
+            <label id="lightDirectionLabel" for="lightDirection">Direction</label>
             <div class="row" id="lightDirection">
                 <div>
                     <label for="lightDirectionX">X:</label>
