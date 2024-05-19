@@ -4,8 +4,6 @@ import { movementHandler } from './movement.js';
 import { removeElement } from './utils.js';
 import { addLight } from './light.js';
 
-
-
 /**
  * Sets up event listeners for the application's UI elements.
  * Binds click events to buttons for adding and removing geometrical objects and lights,
@@ -13,8 +11,7 @@ import { addLight } from './light.js';
  *
  * @param {THREE.Scene} scene - The scene to interact with.
  */
-export function setupEventListeners( scene) {
-    document.getElementById('appearanceOptions').addEventListener('change', () => handleAppearanceOptionChange());
+export function setupEventListeners(scene) {
     document.getElementById('addPrimitive').addEventListener('click', () => applyAppearance(scene));
     document.getElementById('applyChanges').addEventListener('click', () => applyChanges());
     document.getElementById('removeElement').addEventListener('click', () => removeElement(scene));

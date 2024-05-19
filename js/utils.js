@@ -1,10 +1,9 @@
-import { getObjects } from './shapes.js';
 
 /**
  * Updates the element list in the select dropdown with the given objects.
  * Clears the existing options and populates the dropdown with the current objects.
  *
- * @param {Array} objects - The array of objects to list in the dropdown.
+ * @param {import("./shapes.js").SceneObject[]} objects - The array of objects to list in the dropdown.
  */
 export function updateElementList(objects) {
     const select = document.getElementById('selectElement');
@@ -31,6 +30,7 @@ export function getSelectedElementIndex() {
 
 /**
  * Gets the object name from the input
+ *
  * @returns The input string, if there is no input doesn't return anything
  */
 export function getObjectNameFromInput() {
@@ -51,32 +51,34 @@ export function removeElement(scene) {
     }
 }
 
-export function scaleElement(factor) {
-    const selectedIndex = getSelectedElementIndex();
-    const objects = getObjects();
-    if (selectedIndex >= 0) {
-        objects[selectedIndex].element.scale.multiplyScalar(factor);
-    }
+/**
+ * Converts a File object to a data URL.
+ * @param {File} file - The file to convert.
+ * @returns {Promise<string>} - A promise that resolves to the data URL.
+ */
+export function fileToDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => resolve(event.target.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
 }
 
 /**
  * Converts a value in degrees to radians.
  *
- * @param   {[type]}  degrees Angle in degrees.
- * @return  {[type]} Angle in radians.
+ * @param   {number}  degrees Angle in degrees.
+ * @return  {number} Angle in radians.
  */
-export function degreesToRadians( degrees )
-{
+export function degreesToRadians(degrees) {
     return degrees * Math.PI / 180;
 }
 
 /**
  * Resets all the input from the change Object partition in UI to the default values.
- *
- * @return  {void} 
  */
-export function resetChangeObjectProperties()
-{
+export function resetChangeObjectProperties() {
     document.getElementById("editRotationX").value = 0;
     document.getElementById("editRotationY").value = 0;
     document.getElementById("editRotationZ").value = 0;
@@ -85,11 +87,8 @@ export function resetChangeObjectProperties()
 
 /**
  * Resets all the input from the add Object partition in UI to the default values.
- *
- * @return  {void} 
  */
-export function resetInitialObjectProperties()
-{
+export function resetInitialObjectProperties() {
     document.getElementById("width").value = 1;
     document.getElementById("depth").value = 1;
     document.getElementById("height").value = 1;

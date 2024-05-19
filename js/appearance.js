@@ -1,13 +1,11 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties } from './utils.js';
+import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties, fileToDataURL } from './utils.js';
 import { getObjects } from './shapes.js';
 import { render } from './renderer.js';
 
 const allowedTextureTypes = ['image/jpeg', 'image/png'];
 const allowedModelTypes = {
-    'gltf': GLTFLoader,
     'obj': OBJLoader,
 };
 export const animatedObjects = [];
@@ -31,11 +29,11 @@ export function applyColor(color) {
  * @param {THREE.Scene} scene - The scene to add the object
  */
 export function applyModel(modelFile, scene) {
-   
+
     const fileNameParts = modelFile.name.split(".");
-    const typeFromName = fileNameParts[fileNameParts.length-1]; 
-    console.log(typeFromName)
-    if ( !allowedModelTypes[typeFromName] ) {
+    const typeFromName = fileNameParts[fileNameParts.length - 1];
+
+    if (!allowedModelTypes[typeFromName]) {
         alert('Invalid file type. Please select a valid model file (OBJ).');
         return;
     }
@@ -55,7 +53,7 @@ export function applyModel(modelFile, scene) {
 
 /**
  * Replaces the last object in the scene with the given model.
- * @param {THREE.Object3D} model - The model to replace the last object with.
+ * @param {THREE.Mesh} model - The model to replace the last object with.
  * @param {THREE.Scene} scene - The scene to replace the object.
  */
 function replaceLastObjectWithModel(model, scene) {
@@ -66,7 +64,8 @@ function replaceLastObjectWithModel(model, scene) {
     scene.remove(lastObject);
 
     if (!model.material) {
-        model.material = new THREE.MeshBasicMaterial({ color: "#fff" });
+        const material = new THREE.MeshPhongMaterial({ emissive: "#000000", shininess: 150 });
+        model.material = material;
     }
 
     model.name = lastObject.name;
@@ -84,6 +83,75 @@ function replaceLastObjectWithModel(model, scene) {
 }
 
 /**
+ * Applies the model to the last object added.
+ * @param {Object} modelFiles - The model file to apply.
+ * @param {File} modelFiles.modelFile -
+ * @param {File} modelFiles.textureFile -
+ * @param {THREE.Scene} scene - The scene to add the object
+ */
+export async function applyModelWithTexture(modelFiles, scene) {
+
+    const { modelFile, textureFile } = modelFiles;
+    const fileNameParts = modelFile.name.split(".");
+    const typeFromName = fileNameParts[fileNameParts.length - 1];
+
+    if (!allowedModelTypes[typeFromName]) {
+        alert('Invalid file type. Please select a valid model file (OBJ).');
+        return;
+    }
+
+    const LoaderClass = allowedModelTypes[typeFromName];
+    const loader = new LoaderClass();
+
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+        const contents = event.target.result;
+        const object = loader.parse(contents);
+        replaceLastObjectWithModelWithTexture(object, textureFile, scene);
+    };
+    reader.readAsText(modelFile);
+}
+
+/**
+ * Replaces the last SceneObject element in the scene with the given model.
+ * @param {THREE.Mesh} model - The model to replace the last object with.
+ * @param {File} texture - The texture to be applied on the object
+ * @param {THREE.Scene} scene - The scene to replace the object.
+ */
+function replaceLastObjectWithModelWithTexture(model, texture, scene) {
+    const objects = getObjects();
+    if (objects.length === 0) return;
+
+    const lastObject = objects[objects.length - 1].element;
+    scene.remove(lastObject);
+
+    model.traverse(async (child) => {
+        if (child.isMesh) {
+            const textureURL = await fileToDataURL(texture);
+            const loadedTexture = new THREE.TextureLoader().load(textureURL, () => {
+                child.material.map = loadedTexture;
+                child.material.needsUpdate = true;
+            });
+        }
+    });
+
+    // Set the model's name and add it to the scene
+    model.name = lastObject.name;
+
+    // NOTE: Maybe have a function that scales the models to fit inside the canvas?
+    // const maxDim = Math.max(1, 1, 1);
+    // const scaleFactor = 1 / maxDim;
+    // model.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+    scene.add(model);
+
+    objects[objects.length - 1].element = model;
+    updateElementList(objects);
+
+    console.log("Model ", model.name, " applied with Texture:", model);
+}
+
+/**
  * Applies the texture to the selected object.
  * @param {File} file - The texture file to apply.
  * @param {number} selectedElementIndex - The index of the selected element.
@@ -98,15 +166,16 @@ export function applyTexture(file, selectedElementIndex) {
 
     const selectedObject = objects[selectedElementIndex].element;
 
-    const reader = new FileReader();
-    reader.onload = function(event) {
-        const texture = new THREE.TextureLoader().load(event.target.result);
-        selectedObject.material.map = texture;
-        selectedObject.material.needsUpdate = true;
-    };
-
-    reader.readAsDataURL(file);
-    console.log("Texture applied: ", objects[selectedElementIndex]);
+    selectedObject.traverse(async (child) => {
+        if (child.isMesh) {
+            const textureURL = await fileToDataURL(file);
+            const loadedTexture = new THREE.TextureLoader().load(textureURL, () => {
+                child.material.color = null;
+                child.material.map = loadedTexture;
+                child.material.needsUpdate = true;
+            });
+        }
+    });
 }
 
 /**
@@ -124,9 +193,9 @@ function applyScale(factor, selectedIndex) {
  * @param {number} factor - The scale factor to apply.
  * @param {number} selectedIndex - The index of the selected element.
  */
-function applyRotation( selectedIndex, rotationDegreesX=0, rotationDegreesY=0, rotationDegreesZ=0) {
+function applyRotation(selectedIndex, rotationDegreesX = 0, rotationDegreesY = 0, rotationDegreesZ = 0) {
     const objects = getObjects();
-    const element =  objects[selectedIndex].element
+    const element = objects[selectedIndex].element
     element.rotateX(rotationDegreesX);
     element.rotateY(rotationDegreesY);
     element.rotateZ(rotationDegreesZ);
@@ -197,9 +266,9 @@ export function applyChanges() {
     const fileInput = document.getElementById('textureInput');
     const file = fileInput.files[0];
     const selectedElementIndex = getSelectedElementIndex();
-    const rotationX = parseFloat( document.getElementById("editRotationX").value );
-    const rotationY = parseFloat( document.getElementById("editRotationY").value );
-    const rotationZ = parseFloat( document.getElementById("editRotationZ").value );
+    const rotationX = parseFloat(document.getElementById("editRotationX").value);
+    const rotationY = parseFloat(document.getElementById("editRotationY").value);
+    const rotationZ = parseFloat(document.getElementById("editRotationZ").value);
 
 
     const scaleInput = document.getElementById("scale");
@@ -215,10 +284,8 @@ export function applyChanges() {
     }
     if (scaleValue) {
         applyScale(scaleValue, selectedElementIndex);
-       // scaleInput.value = 1;
     }
-    if( rotationX || rotationY || rotationZ )
-    {
+    if (rotationX || rotationY || rotationZ) {
         applyRotation(selectedElementIndex,
             degreesToRadians(rotationX),
             degreesToRadians(rotationY),
@@ -230,8 +297,8 @@ export function applyChanges() {
 
 
     resetChangeObjectProperties();
-    
-} 
+
+}
 
 /**
  * Handles the change in appearance options by displaying the appropriate input elements.
