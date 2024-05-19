@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties, fileToDataURL } from './utils.js';
+import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties, fileToDataURL, scaleModelToFitCanvas } from './utils.js';
 import { getObjects } from './shapes.js';
 import { render } from './renderer.js';
 
@@ -70,10 +70,7 @@ function replaceLastObjectWithModel(model, scene) {
 
     model.name = lastObject.name;
 
-    // NOTE: Maybe have a function that scales the models to fit inside the canvas?
-    // const maxDim = Math.max(1, 1, 1);
-    // const scaleFactor = 1 / maxDim;
-    // model.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    scaleModelToFitCanvas(model);
 
     scene.add(model);
 
@@ -138,10 +135,7 @@ function replaceLastObjectWithModelWithTexture(model, texture, scene) {
     // Set the model's name and add it to the scene
     model.name = lastObject.name;
 
-    // NOTE: Maybe have a function that scales the models to fit inside the canvas?
-    // const maxDim = Math.max(1, 1, 1);
-    // const scaleFactor = 1 / maxDim;
-    // model.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    scaleModelToFitCanvas(model);
 
     scene.add(model);
 

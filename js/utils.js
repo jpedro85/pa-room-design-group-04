@@ -1,3 +1,4 @@
+import * as THREE from "three";
 
 /**
  * Updates the element list in the select dropdown with the given objects.
@@ -103,4 +104,19 @@ export function resetInitialObjectProperties() {
 
     document.getElementById("modelInput").value = "";
     document.getElementById("initialTexture").value = "";
+}
+
+/**
+ * Scales the model to fit within the canvas having an aspect ratio of 1.5/modelSize.
+ * @param {THREE.Mesh} model - The model to scale.
+ */
+export function scaleModelToFitCanvas(model) {
+    const box = new THREE.Box3().setFromObject(model);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const scaleFactor = 1.5 / maxDim;
+
+    model.scale.set(scaleFactor, scaleFactor, scaleFactor);
 }
