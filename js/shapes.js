@@ -49,6 +49,7 @@ export function addCube(scene, sizeProperties, initialRotationProperties, initia
 
 	scene.add(cube);
 	addObjectToList(cube, name);
+    return cube;
 }
 
 /**
@@ -87,6 +88,7 @@ export function addPyramid(scene, sizeProperties , initialRotationProperties, in
 
 	scene.add(pyramid);
 	addObjectToList(pyramid, name);
+    return pyramid;
 }
 
 

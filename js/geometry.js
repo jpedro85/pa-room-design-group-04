@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { addCube, addPyramid } from './shapes.js';
-import { applyColor, applyModel, applyModelWithTexture, applyTexture } from './appearance.js';
+import { applyColor, applyModel, applyModelWithTexture, applyTexture, applyTextureToElement } from './appearance.js';
 import { degreesToRadians, resetInitialObjectProperties } from './utils.js';
 
 /**
@@ -34,14 +34,15 @@ export function applyAppearance(scene) {
     };
 
     let objectCreated = false;
-
+    let object;
+    // TODO: Clean this by converting into an object of objects to reduce number of params
     switch (primitiveOption.value) {
         case 'cube':
-            addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
+            object = addCube(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
             objectCreated = true;
             break;
         case 'pyramid':
-            addPyramid(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
+            object = addPyramid(scene, sizeProperties, initialRotationProperties, initialPositionProperties);
             objectCreated = true;
             break;
         default:
@@ -52,6 +53,8 @@ export function applyAppearance(scene) {
         alert("No object was created.");
         return;
     }
+
+    // TODO: Pass this to be checked first before adding primitives
 
     // Checks if theres is a model to import and if the user has chosen to apply a texture
     if (modelInput.files.length > 0 && textureInput.files.length > 0) {
@@ -69,7 +72,7 @@ export function applyAppearance(scene) {
     }
 
     if (textureInput.files.length > 0) {
-        applyTexture(textureInput.files[0])
+        applyTextureToElement(textureInput.files[0], object)
     } else {
         applyColor(colorPicker.value);
     }

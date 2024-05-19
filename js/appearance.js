@@ -179,6 +179,31 @@ export function applyTexture(file, selectedElementIndex) {
 }
 
 /**
+ * Applies the texture to the desired object.
+ * @param {File} file - The texture file to apply.
+ * @param {THREE.Mesh} element - The element thats going to have the texture applied.
+ *
+ * @note This function is only used for the primitives initial procedure to add to the scene
+ */
+export function applyTextureToElement(file, element) {
+    if (!allowedTextureTypes.includes(file.type)) {
+        alert('Invalid file type. Please select an image file (jpeg, png, gif).');
+        return;
+    }
+
+    element.traverse(async (child) => {
+        if (child.isMesh) {
+            const textureURL = await fileToDataURL(file);
+            const loadedTexture = new THREE.TextureLoader().load(textureURL, () => {
+                child.material.color = null;
+                child.material.map = loadedTexture;
+                child.material.needsUpdate = true;
+            });
+        }
+    });
+}
+
+/**
  * Applies the scale factor to the selected object.
  * @param {number} factor - The scale factor to apply.
  * @param {number} selectedIndex - The index of the selected element.
