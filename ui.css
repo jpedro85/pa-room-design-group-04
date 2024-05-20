@@ -1,0 +1,225 @@
+html{
+    color-scheme: dark
+}
+
+body {
+    margin: 0;
+    display: flex;
+    background-color: #202324;
+    color:#e8e6e3;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    border: solid 1px black;
+    padding: 10px;
+    border-radius: 15px;
+    justify-content: space-evenly;
+    margin: 5px 0;
+    gap: 1rem;
+}
+
+#cantent {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#gl-canvas {
+    width: 800px !important;
+    height: 800px !important;
+}
+
+#ui {
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    min-width: 300px;
+    background-color: #181a1b;
+    padding: 10px;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 100vh;
+}
+
+.primitive-options {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.checkbox-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.checkbox-container label {
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin: 0;
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+#addObject {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#changeTexture {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+button,
+input,
+select {
+    display: block;
+    margin: 5px 0;
+    padding: 10px;
+    width: 100%;
+}
+
+canvas {
+    flex: 1;
+    border: 1px solid #000;
+}
+
+.color-pickers {
+    height: 2.5rem;
+    padding: 0;
+}
+
+.size-option {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.edit-options {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 10px;
+}
+
+.edit-options select,
+.edit-options input[type="number"] {
+    flex: 1 1 45%;
+    min-width: calc(50% - 10px);
+}
+
+.edit-options div {
+    display: flex;
+    flex: 1 1 45%;
+    min-width: calc(50% - 10px);
+    align-items: center;
+}
+
+.edit-options div label {
+    flex: 0 0 auto;
+    margin-right: 10px;
+}
+
+.edit-options input[type="file"] {
+    flex: 1 1 100%;
+    min-width: 100%;
+}
+
+#lightProperties {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.slidecontainer {
+    width: 100%;
+    border-radius: 15px;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #04AA6D;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #04AA6D;
+    cursor: pointer;
+}
+
+#editRotation {
+    margin-bottom: 10px;
+}
+
+#applyChanges {
+    border-width: 0;
+    border-radius: 3px;
+    background-color: blue;
+    color: white;
+}
+
+#removeElement {
+    border-width: 0;
+    border-radius: 3px;
+    background-color: red;
+    color: white;
+}
+
+#PressEsc
+{
+  width: 80%;
+  height: fit-content;
+  padding: 20px;;
+  border-radius: 25px;
+  color:  rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.8);
+  font-size: 25px;
+  display: none;
+}
+
+#ClickToEnter 
+{
+  width: 80%;
+  height: fit-content;
+  padding: 20px;;
+  border-radius: 25px;
+  color: rgb(255, 255, 255);
+  background-color: rgba(0, 0, 0, 0.8);
+  font-size: 25px;
+}

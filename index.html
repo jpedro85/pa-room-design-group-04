@@ -1,47 +1,247 @@
 <html>
-   <head>
-      <script id="vertex-shader" type="x-shader/x-vertex">
-         precision mediump float;
 
-         attribute vec3 vPosition;
-         attribute vec2 vTexCoord;
+<head>
+    <title>PA Room Design</title>
+    <link rel="stylesheet" href="ui.css">
+</head>
 
-         varying vec2 fTexCoord;
+<body>
 
-         uniform mat4 modelViewMatrix;
+    <!-- start scripts for Shader -->
 
-         void main() {
-            fTexCoord = vTexCoord;
-            gl_Position = modelViewMatrix * vec4(vPosition, 1.0);
-         }
-      </script>
-      <script id="fragment-shader" type="x-shader/x-fragment">
-         precision mediump float;
+    <script id="fragmentShader" type="x-shader/x-fragment">
 
-         varying vec2 fTexCoord;
+        uniform float time;
 
-         uniform sampler2D texture;
+        uniform float fogDensity;
+        uniform vec3 fogColor;
 
-         void main()
-         {
-           gl_FragColor = texture2D( texture, fTexCoord );
-         }
-      </script>
+        uniform sampler2D texture1;
+        uniform sampler2D texture2;
 
-      
-   </head>
-   <body>
-      <canvas id="gl-canvas" width="512" height="512">
-         Sorry, but your browser does not support HTML5's canvas element.
-      </canvas>
+        varying vec2 vUv;
 
-      <button id="rotateX">Rotate X</button>
-      <button id="rotateY">Rotate Y</button>
-      <button id="rotateZ">Rotate Z</button>
-      
-      <script src="js/initShaders.js"></script>
-      <script src="js/gl-matrix-min.js"></script>
-      <script src="js/app.js"></script>
+        void main( void ) {
 
-   </body>
+            vec2 position = - 1.0 + 2.0 * vUv;
+
+            vec4 noise = texture2D( texture1, vUv );
+            vec2 T1 = vUv + vec2( 1.5, - 1.5 ) * time * 0.02;
+            vec2 T2 = vUv + vec2( - 0.5, 2.0 ) * time * 0.01;
+
+            T1.x += noise.x * 2.0;
+            T1.y += noise.y * 2.0;
+            T2.x -= noise.y * 0.2;
+            T2.y += noise.z * 0.2;
+
+            float p = texture2D( texture1, T1 * 2.0 ).a;
+
+            vec4 color = texture2D( texture2, T2 * 2.0 );
+            vec4 temp = color * ( vec4( p, p, p, p ) * 2.0 ) + ( color * color - 0.1 );
+
+            if( temp.r > 1.0 ) { temp.bg += clamp( temp.r - 2.0, 0.0, 100.0 ); }
+            if( temp.g > 1.0 ) { temp.rb += temp.g - 1.0; }
+            if( temp.b > 1.0 ) { temp.rg += temp.b - 1.0; }
+
+            gl_FragColor = temp;
+
+            float depth = gl_FragCoord.z / gl_FragCoord.w;
+            const float LOG2 = 1.442695;
+            float fogFactor = exp2( - fogDensity * fogDensity * depth * depth * LOG2 );
+            fogFactor = 1.0 - clamp( fogFactor, 0.0, 1.0 );
+
+            gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+
+        }
+
+    </script>
+
+    <script id="vertexShader" type="x-shader/x-vertex">
+
+        uniform vec2 uvScale;
+        varying vec2 vUv;
+
+        void main()
+        {
+
+            vUv = uvScale * uv;
+            vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+            gl_Position = projectionMatrix * mvPosition;
+
+        }
+
+    </script>
+
+    <!-- End for Shader -->
+
+    <div id="cantent">
+        <div id="PressEsc">
+            Press "Esc" to exit. 
+        </div>
+        <div id="ClickToEnter">
+            Click on image to move the camera with the mouse. 
+        </div>
+        <div id="canvas-container">
+            <canvas id="gl-canvas" width="800" height="800" data-engine="three.js r164">
+                Sorry, but your browser does not support HTML5's canvas element.
+            </canvas>
+        </div>
+    </div>
+
+    <div id="ui">
+        <div id="addObject">
+            <h3>Add Object</h3>
+            <input type="text" id="obj-name" placeholder="Input the object Name" />
+            <div class="primitive-options">
+                <select id="primitive">
+                    <option value="cube" selected>Cube</option>
+                    <option value="pyramid">Pyramid</option>
+                </select>
+                <div class="checkbox-container">
+                    <label for="colorFlag">Activate color on Texture</label>
+                    <input type="checkbox" id="colorFlag">
+                </div>
+            </div>
+            <div class="size-option">
+                <div>
+                    <label for="width">Width:</label>
+                    <input type="number" id="width" name="width" step="0.1" value="1">
+                </div>
+                <div>
+                    <label for="depth">Depth:</label>
+                    <input type="number" id="depth" name="depth" step="0.1" value="1">
+                </div>
+                <div>
+                    <label for="height">Height:</label>
+                    <input type="number" id="height" name="height" step="0.1" value="1">
+                </div>
+            </div>
+            <div>
+                <label for="intialRotation">Initial Rotation</label>
+                <div class="row" id="intialRotation">
+                    <div>
+                        <label for="InitialRotationX">X:</label>
+                        <input type="number" id="InitialRotationX" name="scale" min="-180" max="180" step="1" value="0">
+                    </div>
+                    <div>
+                        <label for="InitialRotationY">Y:</label>
+                        <input type="number" id="InitialRotationY" name="scale" min="-180" max="180" step="1" value="0">
+                    </div>
+                    <div>
+                        <label for="editRotationZ">Z:</label>
+                        <input type="number" id="InitialRotationZ" name="scale" min="-180" max="180" step="1" value="0">
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label for="initialPosition">Initial Position</label>
+                <div class="row" id="initialPosition">
+                    <div>
+                        <label for="InitialPositionX">X:</label>
+                        <input type="number" id="InitialPositionX" name="scale" min="-180" max="180" step="1" value="0">
+                    </div>
+                    <div>
+                        <label for="InitialPositionY">Y:</label>
+                        <input type="number" id="InitialPositionY" name="scale" min="-180" max="180" step="1" value="0">
+                    </div>
+                    <div>
+                        <label for="InitialPositionZ">Z:</label>
+                        <input type="number" id="InitialPositionZ" name="scale" min="-180" max="180" step="1" value="0">
+                    </div>
+                </div>
+            </div>
+            <label for="colorPicker">Color:</label>
+            <input type="color" id="colorPicker" class="color-pickers">
+            <label for="modelInput">Model (if you want to import one):</label>
+            <input type="file" id="modelInput" accept=".obj,.gltf,.glb">
+            <label for="initialTexture">Texture:</label>
+            <input type="file" id="initialTexture" accept="image/*">
+            <button id="addPrimitive">Add Primitive</button>
+        </div>
+        <div id="changeTexture">
+            <h3>Change Object Properties</h3>
+            <div class="edit-options">
+                <select id="selectElement">
+                    <option value="" disabled selected>Select Element</option>
+                </select>
+                <div>
+                    <label for="height">Scale:</label>
+                    <input type="number" id="scale" name="scale" step="0.1" value="1">
+                </div>
+                <input type="file" id="textureInput" accept="image/*">
+            </div>
+            <div style="width: 100%;">
+                <label for="editRotation">Rotation</label>
+                <div class="row" id="editRotation">
+                    <div>
+                        <label for="editRotationX">X:</label>
+                        <input type="number" id="editRotationX" name="scale" min="-180" max="180" step="1" value="0">
+                    </div>
+                    <div>
+                        <label for="editRotationY">Y:</label>
+                        <input type="number" id="editRotationY" name="scale" min="-180" max="180" step="1" value="0">
+                    </div>
+                    <div>
+                        <label for="editRotationZ">Z:</label>
+                        <input type="number" id="editRotationZ" name="scale" min="-180" max="180" step="1" value="0">
+                    </div>
+                </div>
+                <div id="animationControls">
+                    <label>Animation Controls</label>
+                    <button id="addAnimation">Add to animation</button>
+                    <button id="removeAnimation">Remove from animation</button>
+                </div>
+            </div>
+            <button id="applyChanges">Apply Changes</button>
+            <button id="removeElement">Remove Selected</button>
+        </div>
+        <div id="lightProperties">
+            <h3>Light Properties</h3>
+            <select id="lightTypeOption">
+                <option value="Directional" selected>Directional Light</option>
+                <option value="Point">Point Light</option>
+            </select>
+            <button id="addLight">Add Light</button>
+            <div>
+                <label for="lightColor">Color:</label>
+                <input type="color" id="lightColor" class="color-pickers" name="lightColor">
+            </div>
+            <label for="lightPosition">Position</label>
+            <div class="row" id="lightPosition">
+                <div>
+                    <label for="lightPositionX">X:</label>
+                    <input type="number" id="lightPositionX" name="lightPositionX" step="0.1" value="1">
+                </div>
+                <div>
+                    <label for="lightPositionY">Y:</label>
+                    <input type="number" id="lightPositionY" name="lightPositionY" step="0.1" value="1">
+                </div>
+                <div>
+                    <label for="lightPositionZ">Z:</label>
+                    <input type="number" id="lightPositionZ" name="lightPositionZ" step="0.1" value="1">
+                </div>
+            </div>
+
+            <label id="lightDirectionLabel" for="lightDirection">Direction</label>
+            <div class="row" id="lightDirection">
+                <div>
+                    <label for="lightDirectionX">X:</label>
+                    <input type="number" id="lightDirectionX" name="lightPositionX" step="0.1" value="0">
+                </div>
+                <div>
+                    <label for="lightDirectionY">Y:</label>
+                    <input type="number" id="lightDirectionY" name="lightPositionY" step="0.1" value="0">
+                </div>
+                <div>
+                    <label for="lightDirectionZ">Z:</label>
+                    <input type="number" id="lightDirectionZ" name="lightPositionZ" step="0.1" value="0">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/shader.js"></script>
+
+</body>
+
 </html>

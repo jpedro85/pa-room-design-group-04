@@ -1,4 +1,3 @@
-
 # PA Room Design Project
 
 This project is part of the Advanced Programming course and aims to demonstrate the knowledge acquired by students during the final module. The project involves creating a room design visualization using JavaScript, HTML, and WebGL or Three.js libraries.
