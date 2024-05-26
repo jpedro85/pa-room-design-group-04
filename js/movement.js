@@ -21,10 +21,10 @@ const cameraMoves = {
     A: { axis: 'right', direction: -1 },
     d: { axis: 'right', direction: 1 },
     D: { axis: 'right', direction: 1 },
-    q: { axis: 'up', direction: 1 },
-    Q: { axis: 'up', direction: 1 },
-    r: { axis: 'up', direction: -1 },
-    R: { axis: 'up', direction: -1 }
+    q: { axis: 'up', direction: -1 },
+    Q: { axis: 'up', direction: -1 },
+    r: { axis: 'up', direction: 1 },
+    R: { axis: 'up', direction: 1 }
 };
 
 let isTyping = false;
@@ -59,9 +59,8 @@ function moveElement(x = 0, y = 0, z= 0) {
 
 /**
  * Handles keydown events to move the selected element or the camera.
- * @param {KeyboardEvent} event - The keydown event.
  */
-export function movementHandler(event) 
+export async function movementHandler() 
 {
     // Ignore movement if typing in an input field
     if (isTyping) return;
@@ -77,6 +76,23 @@ export function movementHandler(event)
         }
     } 
 }
+
+
+
+let animationFrameId = null;
+
+/**
+ * Schedules the movement handler to run using requestAnimationFrame.
+ */
+export async function scheduleMovement() {
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+    }
+    animationFrameId = requestAnimationFrame( () => {
+        movementHandler();
+    });
+}
+
 
 /**
  * Moves the camera based on the key pressed.
@@ -101,3 +117,12 @@ document.querySelectorAll('input').forEach(inputElement => {
         isTyping = false;
     });
 });
+
+/**
+ * The function `startListeningMovement` sets an interval to call the `movementHandler` function every given ms;
+ * @param ms The intervale of each call in ms.
+ */
+export function startListeningMovement(ms)
+{
+    setInterval(movementHandler, ms);
+}

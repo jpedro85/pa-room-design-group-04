@@ -120,10 +120,17 @@ function getCameraPosition()
  */
 export async function enterCanvas(event,canvas)
 {
-    document.getElementById("PressEsc").style="display: block;";
-    document.getElementById("ClickToEnter").style="display: none;";
-    canvas.onmousemove = (event) => { cameraUpdateDirection(event,canvas) };
-    await canvas.requestPointerLock({  unadjustedMovement: true,});
+    try {
+
+        document.getElementById("PressEsc").style="display: block;";
+        document.getElementById("ClickToEnter").style="display: none;";
+        canvas.onmousemove = (event) => { cameraUpdateDirection(event,canvas) };
+        await canvas.requestPointerLock({  unadjustedMovement: true,});
+
+    } catch (error) {
+        exitCanvas("exit",canvas)
+        console.log("Trying to lock mouse pointer. try again.")
+    }
 } 
 
 /**
@@ -137,12 +144,11 @@ export async function enterCanvas(event,canvas)
  */
 export function exitCanvas(event,canvas)
 {
-    if ( document.pointerLockElement !== canvas) 
+    if ( document.pointerLockElement !== canvas || event==="exit") 
     {
-        document.exitPointerLock();
-        canvas.removeEventListener('mousemove', cameraUpdateDirection, false);
         canvas.onmousemove = null
         document.getElementById("PressEsc").style="display: none;";
         document.getElementById("ClickToEnter").style="display: block;";
+        document.exitPointerLock();
     }
 } 
