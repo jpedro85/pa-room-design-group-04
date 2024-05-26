@@ -189,3 +189,83 @@ export function getPressedKeys()
 {
     return keysPressed;
 }
+
+
+/**
+ * Creates an error message based on a starting string and a dictionary of keys.
+ * 
+ * @param {string} startsWith The starting string of the error message.
+ * @param {Object.<string, any>} dictionary The dictionary of keys.
+ * @returns {string} The error message.
+ */
+export function createErrorWithDictionaryKey(startsWith,dictionary)
+{
+    let error = startsWith
+    for (let key in dictionary) 
+    {
+        if (dictionary.hasOwnProperty(key)) 
+        {
+            error += " " + key +",";
+        }
+    }
+
+    return error.substring( 0 , error.length - 1); 
+}
+
+/**
+ * Scales a box3 by a factor.
+ *
+ * @param   {THREE.Box3} box  The box to scale.
+ * @param   {[type]}  factor  The factor of scale.
+ *
+ */
+export function box3Scale(box,factor)
+{
+    box.min.multiplyScalar(factor);
+    box.max.multiplyScalar(factor);
+}
+
+/**
+ * Translates the box by the given x,y,z values. 
+ *
+ * @param   {THREE.Box3} box The box to translate.
+ * @param   {number} x  The x units to translate.
+ * @param   {number} y  The y units to translate.
+ * @param   {number} z  The z units to translate.
+ *
+ */
+export function box3Translate(box,x,y,z)
+{
+    // const vectorTranslateX = new Vector3(0,0,0).add(new Vector3(x,0,0));
+    // const vectorTranslateXY = vectorTranslateX.add(new THREE.Vector3(0,y,0));
+    // const vectorTranslateXYZ = vectorTranslateX.add(new THREE.Vector3(0,0,z));
+
+    box.min.x += x;
+    box.max.y += y;
+    box.min.z += z;
+
+    box.max.x += x;
+    box.min.y += y;
+    box.max.z += z;
+}
+
+/**
+ * The function `showIntersectionError` checks if there are intersected planes and displays an error
+ * message if so.
+ * @param intersectedPlanes This dictionary contain the intersection planes or empty.
+ * 
+ * @return {string} error, empty if no error.
+ */
+export function hasIntersection( intersectedPlanes )
+{
+    if( Object.keys(intersectedPlanes).length != 0 )
+    {   
+        let error = createErrorWithDictionaryKey( 
+                    "The transformation can not be applied because it causes intersection with:" ,
+                    intersectedPlanes
+                )
+
+        return error;
+    }
+    return "";
+}

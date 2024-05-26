@@ -39,14 +39,14 @@ export function applyAppearance(scene) {
             modelFile: modelInput.files[0],
             textureFile: textureInput.files[0],
         }
-        addModelWithTexture(modelFiles, scene);
+        addModelWithTexture(modelFiles, scene, initialRotationProperties, initialPositionProperties);
         resetInitialObjectProperties();
         return;
     }
     // Check wether the user chose only to import a model
     else if (modelInput.files.length > 0) {
         const modelFile = modelInput.files[0];
-        addModel(modelFile, scene);
+        addModel(modelFile, scene, initialRotationProperties, initialPositionProperties);
         resetInitialObjectProperties();
         return;
     }

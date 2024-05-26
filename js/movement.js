@@ -1,5 +1,5 @@
-import { getSelectedElementIndex , getPressedKeys } from './utils.js';
-import { getObjects } from './shapes.js';
+import { getSelectedElementIndex , getPressedKeys , hasIntersection, box3Translate} from './utils.js';
+import { getIntersectedPlanes, getObjects } from './shapes.js';
 import { getCamera, getCameraVectors } from './camera.js';
 
 
@@ -21,10 +21,10 @@ const cameraMoves = {
     A: { axis: 'right', direction: -1 },
     d: { axis: 'right', direction: 1 },
     D: { axis: 'right', direction: 1 },
-    q: { axis: 'up', direction: 1 },
-    Q: { axis: 'up', direction: 1 },
-    r: { axis: 'up', direction: -1 },
-    R: { axis: 'up', direction: -1 }
+    q: { axis: 'up', direction: -1 },
+    Q: { axis: 'up', direction: -1 },
+    r: { axis: 'up', direction: 1 },
+    R: { axis: 'up', direction: 1 }
 };
 
 let isTyping = false;
@@ -35,34 +35,64 @@ let isTyping = false;
  * @param {number} y - The y offset to move the element.
  * @param {number} z - The z offset to move the element.
  */
-function moveElement(x, y, z) {
+function moveElement(x = 0, y = 0, z= 0) {
+    
     const selectedIndex = getSelectedElementIndex();
-    const objects = getObjects();
+    
     if (selectedIndex >= 0) {
-        objects[selectedIndex].element.position.x += x;
-        objects[selectedIndex].element.position.y += y;
-        objects[selectedIndex].element.position.z += z;
+        
+        const objects = getObjects();
+        const object = objects[selectedIndex]    
+        let box = object.box.clone();
+        box3Translate(box,x,y,z)
+
+        const intersectedPlanes = getIntersectedPlanes(box);
+
+        if ( hasIntersection( intersectedPlanes ) ) return;
+        
+        object.element.position.x += x;
+        object.element.position.y += y;
+        object.element.position.z += z;
+        box3Translate(object.box,x,y,z);
     }
 }
 
 /**
  * Handles keydown events to move the selected element or the camera.
- * @param {KeyboardEvent} event - The keydown event.
  */
-export function movementHandler(event) {
+export async function movementHandler() 
+{
     // Ignore movement if typing in an input field
     if (isTyping) return;
 
     for(let key in getPressedKeys())
     {     
+        if (cameraMoves[key]) {
+            moveCamera(key);
+        }
+
         if (moves[key]) {
             moveElement(...moves[key]);
         }
-        else if (cameraMoves[key]) {
-            moveCamera(key);
-        }
     } 
 }
+
+
+
+let animationFrameId = null;
+
+/**
+ * Schedules the movement handler to run using requestAnimationFrame.
+ */
+export async function scheduleMovement() {
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+    }
+    animationFrameId = requestAnimationFrame( () => {
+        movementHandler();
+    });
+}
+
 
 /**
  * Moves the camera based on the key pressed.
@@ -87,3 +117,12 @@ document.querySelectorAll('input').forEach(inputElement => {
         isTyping = false;
     });
 });
+
+/**
+ * The function `startListeningMovement` sets an interval to call the `movementHandler` function every given ms;
+ * @param ms The intervale of each call in ms.
+ */
+export function startListeningMovement(ms)
+{
+    setInterval(movementHandler, ms);
+}
