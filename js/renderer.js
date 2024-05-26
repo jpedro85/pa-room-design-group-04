@@ -41,13 +41,6 @@ export function render(renderer, scene, camera) {
             obj.rotation.y += 0.01;
             obj.rotation.x += 0.01;
             obj.rotation.z += 0.01;
-            //TODO: ADD jumping animation
-            // if(obj.rotation.z > -1){
-            //     obj.position.y -= 0.1
-            // } 
-            // else if(obj.rotation.z < -1){
-            //     obj.position.y += 0.1
-            // }
         });
         renderer.render(scene, camera);
         stats.update();

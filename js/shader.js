@@ -16,12 +16,12 @@ export function shaderObjectExampleStart(scene, camera, renderer)
     animate();
 }
 
+
 /**
- * The `init` function sets up a 3D scene with a torus mesh, shaders, textures, and post-processing
- * effects using Three.js.
- * @param {THREE.scene} scene - It looks like you have defined the `scene` parameter as a parameter of the `init`
- * function, but then you are also creating a new `THREE.Scene()` inside the function. This can lead to
- * confusion and potential issues.
+ * The function initializes a scene with textures, shaders, and passes for rendering.
+ * @param scene - The `scene`to add the shader.
+ * @param camera - The `camera` of the scene.
+ * @param renderer - The `renderer`.
  */
 function init(scene,camera,renderer) {
 
@@ -77,6 +77,10 @@ function init(scene,camera,renderer) {
 
 }
 
+/**
+ * The function `animate` uses `requestAnimationFrame` to continuously call the `render` function for
+ * smooth animations.
+ */
 function animate() {
 
     requestAnimationFrame( animate );
@@ -85,6 +89,10 @@ function animate() {
 
 }
 
+/**
+ * The function `render` updates the time value of a shader uniform and renders a scene using a
+ * composer with a specified delta value.
+ */
 function render() {
 
     const delta = 5 * clock.getDelta();

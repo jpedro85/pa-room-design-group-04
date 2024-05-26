@@ -1,6 +1,5 @@
 import { removeRotationAnimation, addRotationAnimation, applyChanges, handleLightTypeOptionChange } from './appearance.js';
 import { applyAppearance } from './geometry.js';
-import { scheduleMovement, movementHandler } from './movement.js';
 import { colorFlagHandler, removeElement } from './utils.js';
 import { addLight } from './light.js';
 import { enterCanvas, exitCanvas } from './camera.js'

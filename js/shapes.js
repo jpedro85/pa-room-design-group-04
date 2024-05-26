@@ -89,16 +89,11 @@ export function addCube(scene, sizeProperties, initialRotationProperties, initia
 
 /**
  * The function `isValidPosition` checks if the given coordinates (x, y, z) are within the range of -10
- * to 10.
- * @param x - The `x` parameter represents the position along the x-axis in a 3D coordinate system. The
- * function `isValidPosition` checks if the given position `(x, y, z)` is within the valid range of -10
- * to 10 along all three axes.
- * @param y - It looks like you have provided a function `isValidPosition` that checks if the given
- * coordinates (x, y, z) are within the range of -10 to 10 for each axis.
- * @param z - The function `isValidPosition` checks if a given position in 3D space is valid within the
- * range of -10 to 10 for each coordinate (x, y, z).
- * @returns The function `isValidPosition` returns a boolean value indicating whether the given
- * position (x, y, z) is within the valid range of -10 to 10 for each coordinate axis.
+ * to 10 for each axis.
+ * @param x - The `x`, the position along the x-axis.
+ * @param y - The `y`, the position along the y-axis.
+ * @param z - The `z`, the position along the z-axis.
+ * @returns true if the given position (x, y, z) is within the valid range of -10 to 10 for each coordinate axis.
  */
 export function isValidPosition(x,y,z)
 {
@@ -130,7 +125,7 @@ export function isValidPosition(x,y,z)
 export function addPyramid(scene, sizeProperties, initialRotationProperties, initialPositionProperties) {
     
     if (primitivesInScene == MAX_PRIMITIVES) {
-        alert("Can't add more than 10 primitives to the scene (Squares and Pryramids)!")
+        alert("Can't add more than 10 primitives to the scene (Squares and Pyramids)!")
         return;
     }
 
@@ -196,18 +191,23 @@ export function getObjects() {
     return objects;
 }
 
-
+// Represents an infinity plane parallel to zx in y = 10;
 const planeTop = new THREE.Plane( new THREE.Vector3(0,-1,0) ,10)
+// Represents an infinity plane parallel to zx in y = -10;
 const planeBottom = new THREE.Plane( new THREE.Vector3(0,-1,0) ,-10)
 
+// Represents an infinity plane parallel to yz in y = -10;
 const planeLeft = new THREE.Plane( new THREE.Vector3(-1,0,0),-10)
+// Represents an infinity plane parallel to yz in y = 10;
 const planeRight = new THREE.Plane( new THREE.Vector3(-1,0,0),10)
 
+// Represents an infinity plane parallel to xy in y = 10;
 const planeFront = new THREE.Plane( new THREE.Vector3(0,0,-1),10)
+// Represents an infinity plane parallel to xy in y = -10;
 const planeBack = new THREE.Plane( new THREE.Vector3(0,0,-1),-10)
 
 /**
- * Get All planes.
+ * Get All limit planes.
  * @return {Object}
  * @param {Plane} sizeProperties.planeTop - The top limit plane yy.
  * @param {Plane} sizeProperties.planeBottom - The Bottom limit plane -yy.
@@ -221,7 +221,7 @@ export function getLimitPlanes()
     return { planeTop, planeBottom, planeLeft, planeRight, planeFront, planeBack }
 }
 /**
- * Returns a non empty dictionary if the given box intersects is 
+ * Returns a non empty dictionary if the given box intersects any of the limit planes. 
  * 
  * @param   {THREE.box3} box - The box of the object. 
  *
@@ -253,7 +253,7 @@ export function getIntersectedPlanes(box)
 }
 
 /**
- * [description]
+ * Adds all the needed planes to the scene.
  * @param {THREE.scene} scene - The scene to add the planes
  */
 export function addPlanes(scene) 

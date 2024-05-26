@@ -56,12 +56,8 @@ export function getCameraVectors() {
 /**
  * The function `cameraUpdateDirection` updates the camera's direction based on mouse movement within a
  * canvas element.
- * @param event - The `event` parameter in the `cameraUpdateDirection` function is typically an event
- * object that represents an event that occurs in the browser, such as a mouse movement event. This
- * parameter is used to track the user's interaction with the camera controls.
- * @param canvas - The `canvas` parameter in the `cameraUpdateDirection` function is typically a
- * reference to the HTML `<canvas>` element on which the camera is rendering. It is used to get the
- * mouse position relative to the canvas for camera movement calculations.
+ * @param event - The `keydown` event. 
+ * @param canvas - The `canvas` where the camera is being draw.
  */
 export function cameraUpdateDirection(event,canvas)
 {
@@ -81,13 +77,11 @@ export function cameraUpdateDirection(event,canvas)
 }
 
 /**
- * The function `getMousePosition` calculates the relative position of the mouse within a canvas
+ * The function `getMousePosition` calculates the relative movement of the mouse within a canvas
  * element.
- * @param canvas - The `canvas` parameter in the `getMousePosition` function is the HTML canvas element
- * on which you want to track the mouse position. The function calculates the mouse position relative
- * to the center of the canvas and returns an object with `x` and `y` coordinates.
+ * @param canvas - The `canvas` .
  * @returns The function `getMousePosition` returns an object with the x and y coordinates of the mouse
- * position relative to the center of the canvas.
+ * relative movement.
  */
 function getMousePosition(event,canvas)
 {
@@ -112,13 +106,10 @@ function getCameraPosition()
 /**
  * The function `enterCanvas` sets up an event listener for mouse movement on a canvas element and
  * requests pointer lock for the canvas.
- * @param event - The `event` parameter is typically an object that represents an event that has
- * occurred, such as a mouse click, key press, or other user interaction with the webpage. In this
- * case, it is being used to handle mouse movement events within a canvas element.
  * @param canvas - The `canvas` parameter is a reference to the HTML canvas element on which the event
  * listener and pointer lock request will be applied.
  */
-export async function enterCanvas(event,canvas)
+export async function enterCanvas(canvas)
 {
     try {
 
@@ -128,23 +119,24 @@ export async function enterCanvas(event,canvas)
         await canvas.requestPointerLock({  unadjustedMovement: true,});
 
     } catch (error) {
-        exitCanvas("exit",canvas)
+        exitCanvas(canvas,true)
         console.log("Trying to lock mouse pointer. try again.")
     }
 } 
 
+
 /**
- * The function `exitCanvas` checks if the pointer is locked to a specific canvas element and removes
- * an event listener for mouse movement if it is not.
- * @param event - The `event` parameter typically represents the event that triggered the function,
- * such as a mouse click or key press. In this case, it seems like the `exitCanvas` function is
- * designed to handle exiting a canvas element, possibly related to pointer lock functionality.
- * @param canvas - The `canvas` parameter in the `exitCanvas` function is a reference to the HTML
- * canvas element that you want to check for pointer lock when exiting.
+ * The function `exitCanvas` checks if the pointer is locked to a canvas element and exits pointer lock
+ * if specified or if the pointer is not locked to the canvas.
+ * @param canvas - The `canvas` parameter is a reference to the HTML canvas element that is being used
+ * for pointer lock functionality in the code snippet.
+ * @param [exit=false] - The `exit` parameter in the `exitCanvas` function is a boolean parameter with
+ * a default value of `false`. This parameter is used to determine whether the function should override the canvas has pointer 
+ * and exit the canvas or not.
  */
-export function exitCanvas(event,canvas)
+export function exitCanvas(canvas,exit=false)
 {
-    if ( document.pointerLockElement !== canvas || event==="exit") 
+    if ( document.pointerLockElement !== canvas || exit) 
     {
         canvas.onmousemove = null
         document.getElementById("PressEsc").style="display: none;";

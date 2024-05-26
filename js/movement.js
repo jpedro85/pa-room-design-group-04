@@ -2,8 +2,10 @@ import { getSelectedElementIndex , getPressedKeys , hasIntersection, box3Transla
 import { getIntersectedPlanes, getObjects } from './shapes.js';
 import { getCamera, getCameraVectors } from './camera.js';
 
-
+// The speed of the camera.
 const CAMERA_SPEED = 0.1;
+
+// Dictionary represents all the allowed movements ant ist vectors.
 const moves = {
     'ArrowUp': [0, 0, 0.1],
     'ArrowDown': [0, 0, -0.1],
@@ -12,6 +14,8 @@ const moves = {
     'PageUp': [0, 0.1, 0],
     'PageDown': [0, -0.1, 0],
 };
+
+// Dictionary relates a key do a direction and an axis.
 const cameraMoves = {
     w: { axis: 'forward', direction: 1 },
     W: { axis: 'forward', direction: 1 },
@@ -27,6 +31,7 @@ const cameraMoves = {
     R: { axis: 'up', direction: 1 }
 };
 
+// variable to keep track if the user is typing
 let isTyping = false;
 
 /**
@@ -77,23 +82,6 @@ export async function movementHandler()
     } 
 }
 
-
-
-let animationFrameId = null;
-
-/**
- * Schedules the movement handler to run using requestAnimationFrame.
- */
-export async function scheduleMovement() {
-    if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-    }
-    animationFrameId = requestAnimationFrame( () => {
-        movementHandler();
-    });
-}
-
-
 /**
  * Moves the camera based on the key pressed.
  * @param {string} key - The key pressed.
@@ -109,6 +97,7 @@ export function moveCamera(key) {
     }
 }
 
+// add event listener to set isTyping status.
 document.querySelectorAll('input').forEach(inputElement => {
     inputElement.addEventListener('focus', () => {
         isTyping = true;

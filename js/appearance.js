@@ -5,16 +5,20 @@ import { addObjectToList, getObjects, isValidPosition } from './shapes.js';
 import { getLimitPlanes,getIntersectedPlanes } from './shapes.js';
 import { createErrorWithDictionaryKey , hasIntersection } from './utils.js'
 
+// Number of models allowed in the scene.
 const MAX_MODELS = 5;
 
+// Allowed texture type files.
 const allowedTextureTypes = ['image/jpeg', 'image/png'];
 const allowedModelTypes = {
     'obj': OBJLoader,
 };
 
+// variables to keep track of all the objects to animate.
 export const animatedObjects = [];
 export const initialStates = new Map();
 
+// modelsInScene keeps track of the number of models created.
 let modelsInScene = 0;
 
 /**
