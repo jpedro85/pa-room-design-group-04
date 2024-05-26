@@ -1,5 +1,5 @@
-import { getSelectedElementIndex , getPressedKeys } from './utils.js';
-import { getObjects } from './shapes.js';
+import { getSelectedElementIndex , getPressedKeys , hasIntersection, box3Translate} from './utils.js';
+import { getIntersectedPlanes, getObjects } from './shapes.js';
 import { getCamera, getCameraVectors } from './camera.js';
 
 
@@ -35,13 +35,25 @@ let isTyping = false;
  * @param {number} y - The y offset to move the element.
  * @param {number} z - The z offset to move the element.
  */
-function moveElement(x, y, z) {
+function moveElement(x = 0, y = 0, z= 0) {
+    
     const selectedIndex = getSelectedElementIndex();
-    const objects = getObjects();
+    
     if (selectedIndex >= 0) {
-        objects[selectedIndex].element.position.x += x;
-        objects[selectedIndex].element.position.y += y;
-        objects[selectedIndex].element.position.z += z;
+        
+        const objects = getObjects();
+        const object = objects[selectedIndex]    
+        let box = object.box.clone();
+        box3Translate(box,x,y,z)
+
+        const intersectedPlanes = getIntersectedPlanes(box);
+
+        if ( hasIntersection( intersectedPlanes ) ) return;
+        
+        object.element.position.x += x;
+        object.element.position.y += y;
+        object.element.position.z += z;
+        box3Translate(object.box,x,y,z);
     }
 }
 
@@ -49,17 +61,19 @@ function moveElement(x, y, z) {
  * Handles keydown events to move the selected element or the camera.
  * @param {KeyboardEvent} event - The keydown event.
  */
-export function movementHandler(event) {
+export function movementHandler(event) 
+{
     // Ignore movement if typing in an input field
     if (isTyping) return;
 
     for(let key in getPressedKeys())
     {     
+        if (cameraMoves[key]) {
+            moveCamera(key);
+        }
+
         if (moves[key]) {
             moveElement(...moves[key]);
-        }
-        else if (cameraMoves[key]) {
-            moveCamera(key);
         }
     } 
 }

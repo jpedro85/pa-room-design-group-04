@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
-import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties, fileToDataURL, scaleModelToFitCanvas, getObjectNameFromInput } from './utils.js';
-import { addObjectToList, getObjects } from './shapes.js';
+import { degreesToRadians, getSelectedElementIndex, updateElementList, resetChangeObjectProperties, fileToDataURL, scaleModelToFitCanvas, getObjectNameFromInput, box3Scale } from './utils.js';
+import { addObjectToList, getObjects, isValidPosition } from './shapes.js';
+import { getLimitPlanes,getIntersectedPlanes } from './shapes.js';
+import { createErrorWithDictionaryKey , hasIntersection } from './utils.js'
 
 const MAX_MODELS = 5;
 
@@ -31,8 +33,16 @@ export function applyColor(color, object) {
  * Adds the model to the scene
  * @param {File} modelFile - The model file thats going to be imported
  * @param {THREE.Scene} scene - The scene to add the object
+ * @param {Object} initialRotationProperties - The initial rotation properties for the cube.
+ * @param {number} initialRotationProperties.x - The x rotation in radians.
+ * @param {number} initialRotationProperties.y - The y rotation in radians.
+ * @param {number} initialRotationProperties.z - The z rotation in radians.
+ * @param {Object} initialPositionProperties - The initial Position properties for the cube.
+ * @param {number} initialPositionProperties.x - The x Position.
+ * @param {number} initialPositionProperties.y - The y Position.
+ * @param {number} initialPositionProperties.z - The z Position.
  */
-export function addModel(modelFile, scene) {
+export function addModel(modelFile, scene, initialRotationProperties, initialPositionProperties) {
     if (modelsInScene == MAX_MODELS) {
         alert("Can't add more than 5 models to the scene!")
         return;
@@ -53,7 +63,7 @@ export function addModel(modelFile, scene) {
     reader.onload = (event) => {
         const contents = event.target.result;
         const object = loader.parse(contents);
-        addModelToScene(object, scene);
+        addModelToScene(object, scene, initialRotationProperties, initialPositionProperties);
     };
     reader.readAsText(modelFile);
     modelsInScene++;
@@ -63,23 +73,56 @@ export function addModel(modelFile, scene) {
  * Adds the imported model to scene
  * @param {THREE.Mesh} model - The model to replace the last object with.
  * @param {THREE.Scene} scene - The scene to replace the object.
+ * @param {Object} initialRotationProperties - The initial rotation properties for the cube.
+ * @param {number} initialRotationProperties.x - The x rotation in radians.
+ * @param {number} initialRotationProperties.y - The y rotation in radians.
+ * @param {number} initialRotationProperties.z - The z rotation in radians.
+ * @param {Object} initialPositionProperties - The initial Position properties for the cube.
+ * @param {number} initialPositionProperties.x - The x Position.
+ * @param {number} initialPositionProperties.y - The y Position.
+ * @param {number} initialPositionProperties.z - The z Position.
  */
-function addModelToScene(model, scene) {
+function addModelToScene(model, scene, initialRotationProperties, initialPositionProperties) {
 
     if (!model.material) {
         const material = new THREE.MeshPhongMaterial({ emissive: "#000000", shininess: 150 });
         model.material = material;
     }
 
+    if ( ! isValidPosition(initialPositionProperties.x,initialPositionProperties.y,initialPositionProperties.z))
+    {
+        alert("The initial position needs to be inside the room.");
+        return;
+    }
+
     scaleModelToFitCanvas(model);
 
-    scene.add(model);
+    model.position.set(
+        initialPositionProperties.x,
+        initialPositionProperties.y,
+        initialPositionProperties.z
+    )
+    
+    model.rotateX(initialRotationProperties.x)
+    model.rotateY(initialRotationProperties.y)
+    model.rotateZ(initialRotationProperties.z)
 
     const sceneObject = {
         element: model,
+        box : new THREE.Box3().setFromObject(model),
         name: getObjectNameFromInput(),
         colorFlag: false,
     }
+    
+    let error = hasIntersection( getIntersectedPlanes(sceneObject.box) );
+    if( error )
+    {
+        alert(error);
+        return;
+    }
+   
+    scene.add(model);
+
     addObjectToList(sceneObject)
     console.log("Model applied:", model);
 }
@@ -90,8 +133,16 @@ function addModelToScene(model, scene) {
  * @param {File} modelFiles.modelFile - The model file thats being imported.
  * @param {File} modelFiles.textureFile - The texture file thats going to be applied to the model.
  * @param {THREE.Scene} scene - The scene to add the object
+ * @param {Object} initialRotationProperties - The initial rotation properties for the cube.
+ * @param {number} initialRotationProperties.x - The x rotation in radians.
+ * @param {number} initialRotationProperties.y - The y rotation in radians.
+ * @param {number} initialRotationProperties.z - The z rotation in radians.
+ * @param {Object} initialPositionProperties - The initial Position properties for the cube.
+ * @param {number} initialPositionProperties.x - The x Position.
+ * @param {number} initialPositionProperties.y - The y Position.
+ * @param {number} initialPositionProperties.z - The z Position.
  */
-export async function addModelWithTexture(modelFiles, scene) {
+export async function addModelWithTexture(modelFiles, scene, initialRotationProperties, initialPositionProperties) {
     if (modelsInScene == MAX_MODELS) {
         alert("Can't add more than 5 models to the scene!")
         return;
@@ -113,7 +164,7 @@ export async function addModelWithTexture(modelFiles, scene) {
     reader.onload = (event) => {
         const contents = event.target.result;
         const object = loader.parse(contents);
-        addModelWithTextureToScene(object, textureFile, scene);
+        addModelWithTextureToScene(object, textureFile, scene, initialRotationProperties, initialPositionProperties);
     };
     reader.readAsText(modelFile);
     modelsInScene++;
@@ -124,8 +175,16 @@ export async function addModelWithTexture(modelFiles, scene) {
  * @param {THREE.Mesh} model - The model to replace the last object with.
  * @param {File} texture - The texture to be applied on the object
  * @param {THREE.Scene} scene - The scene to replace the object.
+ * @param {Object} initialRotationProperties - The initial rotation properties for the cube.
+ * @param {number} initialRotationProperties.x - The x rotation in radians.
+ * @param {number} initialRotationProperties.y - The y rotation in radians.
+ * @param {number} initialRotationProperties.z - The z rotation in radians.
+ * @param {Object} initialPositionProperties - The initial Position properties for the cube.
+ * @param {number} initialPositionProperties.x - The x Position.
+ * @param {number} initialPositionProperties.y - The y Position.
+ * @param {number} initialPositionProperties.z - The z Position.
  */
-function addModelWithTextureToScene(model, texture, scene) {
+function addModelWithTextureToScene(model, texture, scene, initialRotationProperties, initialPositionProperties) {
 
     model.traverse(async (child) => {
         if (child.isMesh) {
@@ -137,16 +196,42 @@ function addModelWithTextureToScene(model, texture, scene) {
         }
     });
 
+    
+    if ( ! isValidPosition(initialPositionProperties.x,initialPositionProperties.y,initialPositionProperties.z))
+    {
+        alert("The initial position needs to be inside the room.");
+        return;
+    }
+        
     scaleModelToFitCanvas(model);
 
-    scene.add(model);
+    model.position.set(
+        initialPositionProperties.x,
+        initialPositionProperties.y,
+        initialPositionProperties.z
+    )
 
+    model.rotateX(initialRotationProperties.x)
+    model.rotateY(initialRotationProperties.y)
+    model.rotateZ(initialRotationProperties.z)
+    
     const sceneObject = {
         element: model,
+        box : new THREE.Box3().setFromObject(model),
         name: getObjectNameFromInput(),
         // Doesn't work on the models
         colorFlag: false,
     }
+
+    let error = hasIntersection( getIntersectedPlanes(sceneObject.box) );
+    if( error )
+    {
+        alert(error);
+        return;
+    }
+
+    scene.add(model);
+
     addObjectToList(sceneObject)
     console.log("Model ", model.name, " applied with Texture:", model);
 }
@@ -211,9 +296,23 @@ export function applyTextureToElement(file, sceneObject) {
  * Applies the scale factor to the selected object.
  * @param {number} factor - The scale factor to apply.
  * @param {number} selectedIndex - The index of the selected element.
+ * 
  */
 function applyScale(factor, selectedIndex) {
     const objects = getObjects();
+    const object = objects[selectedIndex];
+
+    let box = object.box.clone();
+    box3Scale(box,factor)
+
+    const intersectedPlanes = getIntersectedPlanes(box);
+    let error = hasIntersection(intersectedPlanes)
+    if( error ) 
+    {
+        alert( error )
+        return;
+    }
+    
     objects[selectedIndex].element.scale.multiplyScalar(factor);
 }
 
@@ -221,13 +320,32 @@ function applyScale(factor, selectedIndex) {
  * Applies the scale factor to the selected object.
  * @param {number} factor - The scale factor to apply.
  * @param {number} selectedIndex - The index of the selected element.
+ * @param {number} rotationX - the rotation in radians.
+ * @param {number} rotationY - the rotation in radians.
+ * @param {number} rotationZ - the rotation in radians.
  */
-function applyRotation(selectedIndex, rotationDegreesX = 0, rotationDegreesY = 0, rotationDegreesZ = 0) {
+function applyRotation(selectedIndex, rotationX = 0, rotationY = 0, rotationZ = 0) {
+    
     const objects = getObjects();
-    const element = objects[selectedIndex].element
-    element.rotateX(rotationDegreesX);
-    element.rotateY(rotationDegreesY);
-    element.rotateZ(rotationDegreesZ);
+    const object = objects[selectedIndex]
+    const element = object.element;
+
+    element.rotateX(rotationX);
+    element.rotateY(rotationY);
+    element.rotateZ(rotationZ);
+    let Box = new THREE.Box3().setFromObject(element);
+    
+    const intersectedPlanes = getIntersectedPlanes(Box);
+    let error = hasIntersection(intersectedPlanes)
+    if( error ) 
+    {
+        element.rotateX(-rotationX);
+        element.rotateY(-rotationY);
+        element.rotateZ(-rotationZ);
+        alert(error)
+    }
+    return;
+
 }
 
 /**

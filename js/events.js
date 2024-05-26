@@ -24,7 +24,7 @@ export function setupEventListeners(scene, canvas) {
     document.getElementById('removeAnimation').addEventListener('click', () => removeRotationAnimation())
 
     document.addEventListener('keydown', (event) => { addKey(event); movementHandler(event) });
-    document.addEventListener('keyup', removeKey);
+    document.addEventListener('keyup', (event) => removeKey(event) );
 
     document.addEventListener("pointerlockchange", (event) => exitCanvas(event, canvas))
     canvas.addEventListener('click', (event) => { enterCanvas(event, canvas); });
