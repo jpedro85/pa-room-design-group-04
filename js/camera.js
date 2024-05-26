@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { getAxisVectors, getPressedKeys } from './utils';
+import { clearPressedKeys, getAxisVectors } from './utils';
 
 let camera;
 
@@ -142,5 +142,6 @@ export function exitCanvas(canvas,exit=false)
         document.getElementById("PressEsc").style="display: none;";
         document.getElementById("ClickToEnter").style="display: block;";
         document.exitPointerLock();
+        clearPressedKeys();   
     }
 } 

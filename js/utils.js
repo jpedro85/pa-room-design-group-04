@@ -162,6 +162,14 @@ export function getAxisVectors()
 let keysPressed = {};
 
 /**
+ * The function `clearPressedKeys` clears the `keysPressed` object in JavaScript.
+ */
+export function clearPressedKeys()
+{
+    keysPressed = {};
+}
+
+/**
  * The function `addKey` adds the pressed key to the `keysPressed` object.
  * @param event - The `event` parameter is an object that contains information about the event that
  * occurred, such as a key press event in this case.
