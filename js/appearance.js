@@ -306,18 +306,19 @@ function applyScale(factor, selectedIndex) {
     const objects = getObjects();
     const object = objects[selectedIndex];
 
-    let box = object.box.clone();
-    box3Scale(box,factor)
+    objects[selectedIndex].element.scale.multiplyScalar(factor);
+    object.box = new THREE.Box3().setFromObject(object.element)
 
-    const intersectedPlanes = getIntersectedPlanes(box);
+    const intersectedPlanes = getIntersectedPlanes(object.box);
     let error = hasIntersection(intersectedPlanes)
     if( error ) 
     {
         alert( error )
+        objects[selectedIndex].element.scale.multiplyScalar(1/factor);
+        object.box = new THREE.Box3().setFromObject(object.element)
         return;
     }
     
-    objects[selectedIndex].element.scale.multiplyScalar(factor);
 }
 
 /**
