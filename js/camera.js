@@ -136,7 +136,7 @@ export async function enterCanvas(canvas)
  */
 export function exitCanvas(canvas,exit=false)
 {
-    if ( document.pointerLockElement !== canvas || exit) 
+    if ( document.pointerLockElement !== canvas || exit===true) 
     {
         canvas.onmousemove = null
         document.getElementById("PressEsc").style="display: none;";

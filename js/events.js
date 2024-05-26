@@ -25,6 +25,6 @@ export function setupEventListeners(scene, canvas) {
     document.addEventListener('keydown', (event) => { addKey(event); });
     document.addEventListener('keyup', (event) => {removeKey(event); });
 
-    document.addEventListener("pointerlockchange", (event) => exitCanvas(event, canvas))
-    canvas.addEventListener('click', (event) => { enterCanvas(event, canvas); });
+    document.addEventListener("pointerlockchange", (event) => exitCanvas(canvas))
+    canvas.addEventListener('click', (event) => { enterCanvas(canvas); });
 }
