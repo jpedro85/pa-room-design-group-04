@@ -18,6 +18,8 @@ O objetivo é simular a disposição de objetos de várias dimensões dentro de 
 - Node.js
 - npm (Node Package Manager)
 
+Nota: O Node.js foi utilizado apenas para instalaçao do threejs e fazer localhost do projeto, permitindo melhor desenvolvimento
+
 ## Configuração
 
 Siga estes passos para configurar e executar o projeto:
