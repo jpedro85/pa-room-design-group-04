@@ -24,8 +24,8 @@ Siga estes passos para configurar e executar o projeto:
 
 1. **Clone o repositório**:
    ```sh
-   git clone <url-do-repositorio>
-   cd <pasta-do-repositorio>
+   git clone https://github.com/jpedro85/pa-room-design-group-04.git
+   cd pa-design-group-04
    ```
 2. **Instale as dependências**:
    ```sh
